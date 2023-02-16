@@ -1,0 +1,7 @@
+{
+  "name": "following-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
