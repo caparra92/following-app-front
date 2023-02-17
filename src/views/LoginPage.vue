@@ -2,7 +2,8 @@
   <ion-page>
     <ion-content>
         <ion-grid class="container">
-            <ion-row>
+          <ion-toggle color="primary" @ion-change="changeView"></ion-toggle> 
+          <ion-row>
               <ion-col><p class="title">Login</p></ion-col>
             </ion-row>
             <form action="">
@@ -10,7 +11,7 @@
               <ion-row>
                 <ion-col>
                   <ion-item>
-                    <ion-input>
+                    <ion-input class="has-focus">
                       <ion-icon size="large" :icon="personCircleOutline"></ion-icon>
                     </ion-input>
                   </ion-item>
@@ -40,17 +41,25 @@
 </template>
 
 <script lang="ts">
-import { IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import router from '../router';
+import { IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonToggle } from '@ionic/vue';
 import { lockClosedOutline, personCircleOutline } from 'ionicons/icons';
 import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'LoginPage',
   components: {
-  IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol
+  IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonToggle
+  },
+  model: {
+    toggle: true
   },
   setup() {
-    return {lockClosedOutline, personCircleOutline}
+    function changeView():void {
+        
+        router.push('Register');
+    }
+    return {lockClosedOutline, personCircleOutline, changeView}
   }
 });
 </script>
@@ -66,6 +75,12 @@ export default defineComponent({
   text-align: center;
 }
 
+ion-toggle {
+    margin-top: 2em;
+    width:5em;
+    height: 2.3em;
+    align-self: center;
+  }
 .title {
   font-family: 'Outfit', sans-serif;
   color: var(--ion-color-primary);
@@ -74,15 +89,20 @@ export default defineComponent({
 }
 
 ion-input {
-  height: 4em;
-  background-color: var(--ion-color-secondary);
+  background: var(--ion-color-secondary);
   color: var(--ion-color-primary);
+  height: 4em;
   border-radius: 7px;
-  border-color: var(--ion-color-primary);
-  border: 1px solid;
-  --padding-start: 8px;
-  padding-left: 8px;
+  outline: none;
   margin: 1.2em;
+  transition: all 0.30s ease-in-out;
+}
+
+ion-input:focus {
+  box-shadow: 0 0 5px rgba(var(--ion-color-primary-rgb), 1);
+  padding: 3px 0px 3px 3px;
+  margin: 5px 1px 3px 0px;
+  border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
 }
 
 ion-icon {
