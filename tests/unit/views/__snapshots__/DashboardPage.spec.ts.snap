@@ -1,0 +1,54 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard tests Verify HTML content 1`] = `
+<div class="ion-page">
+  <ion-content class="">
+    <ion-grid class="container">
+      <ion-row>
+        <ion-col>
+          <ion-avatar class=""><img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg"></ion-avatar>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p>Camilo</p>
+          <p>Parra</p>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+        <ion-col class="">
+          <p>Sports</p>
+        </ion-col>
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+        <ion-col class="">
+          <p>Reading</p>
+        </ion-col>
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+        <ion-col class="">
+          <p>Others</p>
+        </ion-col>
+        <ion-col class=""><button>
+            <ion-icon></ion-icon>
+          </button></ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-content>
+</div>
+`;

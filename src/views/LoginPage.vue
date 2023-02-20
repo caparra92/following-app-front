@@ -2,7 +2,14 @@
   <ion-page>
     <ion-content>
         <ion-grid class="container">
-          <ion-toggle color="primary" @ion-change="changeView"></ion-toggle> 
+          <ion-row>
+            <ion-col>
+              <div class="multi-button">
+                    <button class="multi-button_button toggle" disabled>Login</button>
+                    <button class="multi-button_button toggle" @click="changeView">Register</button>
+                  </div>
+            </ion-col>
+          </ion-row>
           <ion-row>
               <ion-col><p class="title">Login</p></ion-col>
             </ion-row>
@@ -11,7 +18,7 @@
               <ion-row>
                 <ion-col>
                   <ion-item>
-                    <ion-input class="has-focus">
+                    <ion-input class="has-focus" v-model="email">
                       <ion-icon size="large" :icon="personCircleOutline"></ion-icon>
                     </ion-input>
                   </ion-item>
@@ -20,7 +27,7 @@
               <ion-row>
                 <ion-col>
                   <ion-item>
-                    <ion-input type="password">
+                    <ion-input type="password" v-model="password">
                       <ion-icon size="large" :icon="lockClosedOutline"></ion-icon>
                     </ion-input>
                   </ion-item>
@@ -29,7 +36,7 @@
               <ion-row>
                 <ion-col>
                   <ion-item>
-                    <ion-button>Enter</ion-button>
+                    <ion-button @click="login">Enter</ion-button>
                   </ion-item>
                 </ion-col>
               </ion-row>
@@ -40,28 +47,26 @@
   </ion-page>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import router from '../router';
-import { IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonToggle } from '@ionic/vue';
+import { IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { lockClosedOutline, personCircleOutline } from 'ionicons/icons';
-import { defineComponent, ref } from 'vue';
+import { useStore } from '../stores/store';
 
-export default defineComponent({
-  name: 'LoginPage',
-  components: {
-  IonPage, IonContent, IonList, IonItem, IonInput, IonIcon, IonButton, IonGrid, IonRow, IonCol, IonToggle
-  },
-  model: {
-    toggle: true
-  },
-  setup() {
-    function changeView():void {
-        
-        router.push('Register');
-    }
-    return {lockClosedOutline, personCircleOutline, changeView}
-  }
-});
+const store = useStore();
+const email = null;
+const password = null;
+
+console.log(`Email: ${email}, password: ${password}`)
+
+const changeView = () => {
+  router.push("Register");
+};
+
+const login = async() => {
+  await store.login(email, password);
+}
+
 </script>
 
 <style scoped>
@@ -75,12 +80,41 @@ export default defineComponent({
   text-align: center;
 }
 
-ion-toggle {
-    margin-top: 2em;
+.multi-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0 1.2em;
+  }
+  
+  .toggle {
+    margin: 2em 0;
     width:5em;
     height: 2.3em;
     align-self: center;
+    font-family: 'Outfit', sans-serif;
+    text-transform: capitalize;
+    width: 100%;
+    height: 4em;
+    margin: 1.2em 1.2em 0 1.2em;
+    font-size: 1em;
+    border-radius: 7px;
   }
+
+  .toggle:first-child {
+    border-radius: 7px 0 0 7px !important;
+    margin-right: 0;
+    background: rgba(var(--ion-color-primary-rgb), .6);
+    color: var(--ion-color-light);
+  }
+
+  .toggle:last-child {
+    border-radius: 0 7px 7px 0 !important;
+    margin-left: 0;
+    background: rgba(var(--ion-color-primary-rgb), 1);
+    color: var(--ion-color-light);
+  }
+
 .title {
   font-family: 'Outfit', sans-serif;
   color: var(--ion-color-primary);

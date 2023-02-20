@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Category Badge tests Verify HTML structure 1`] = `
+<ion-row
+  class=""
+>
+  <ion-col
+    class=""
+  >
+    <button>
+      <ion-icon />
+    </button>
+  </ion-col>
+  <ion-col
+    class=""
+  >
+    <p>
+      Activity type
+    </p>
+  </ion-col>
+  <ion-col
+    class=""
+  >
+    <button>
+      <ion-icon />
+    </button>
+  </ion-col>
+</ion-row>
+`;

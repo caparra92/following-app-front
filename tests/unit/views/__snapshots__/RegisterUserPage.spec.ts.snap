@@ -1,0 +1,67 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Register Page tests Verify HTML structure 1`] = `
+<div class="ion-page">
+  <ion-content class="">
+    <ion-grid class="container">
+      <ion-row class="">
+        <ion-col class="">
+          <div class="multi-button"><button class="multi-button_button toggle">Login</button><button class="multi-button_button toggle" disabled="">Register</button></div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col class="">
+          <p class="title">Register</p>
+        </ion-col>
+      </ion-row>
+      <form action="">
+        <ion-list class="">
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class=""></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <!-- <ion-row>
+                  <ion-col>
+                    <ion-item>
+                      <ion-input placeholder="Phone">
+                      </ion-input>
+                    </ion-item>
+                  </ion-col>
+                </ion-row> -->
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class=""></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class=""></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class=""></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-button class="">Enter</ion-button>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-list>
+      </form>
+    </ion-grid>
+  </ion-content>
+</div>
+`;

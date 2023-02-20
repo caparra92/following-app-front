@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Login tests Verify HTML structure 1`] = `
+<div class="ion-page">
+  <ion-content class="">
+    <ion-grid class="container">
+      <ion-row class="">
+        <ion-col class="">
+          <div class="multi-button"><button class="multi-button_button toggle" disabled="">Login</button><button class="multi-button_button toggle">Register</button></div>
+        </ion-col>
+      </ion-row>
+      <ion-row class="">
+        <ion-col class="">
+          <p class="title">Login</p>
+        </ion-col>
+      </ion-row>
+      <form action="">
+        <ion-list class="">
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class="has-focus">
+                  <ion-icon></ion-icon>
+                </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-input class="">
+                  <ion-icon></ion-icon>
+                </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+          <ion-row class="">
+            <ion-col class="">
+              <ion-item class="">
+                <ion-button class="">Enter</ion-button>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-list>
+      </form>
+    </ion-grid>
+  </ion-content>
+</div>
+`;
