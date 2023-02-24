@@ -1,7 +1,7 @@
 <template>
     <ion-row>
       <ion-col size="auto">
-        <button>
+        <button @click="newItem">
           <ion-icon size = "large" :icon="addOutline"></ion-icon>
         </button>
       </ion-col>
@@ -9,7 +9,7 @@
         <p>{{ activityType }}</p>
       </ion-col>
       <ion-col size="auto">
-        <button>
+        <button @click="viewItems">
           <ion-icon size = "large" :icon="chevronForwardOutline"></ion-icon>
         </button>
       </ion-col>
@@ -17,17 +17,44 @@
 </template>
 
 <script setup>
+import router from "../router";
 import { IonGrid, IonRow, IonCol, IonIcon, IonButton } from '@ionic/vue';
 import { addOutline, chevronForwardOutline } from 'ionicons/icons';
 import { defineProps } from 'vue';
+import { useStore } from '../stores/store';
 
+const store = useStore();
 
 const props = defineProps({
   activityType: {
     type: String,
     default: "Activity type"
+  },
+  view: {
+    type: String,
+    default: 'View'
   }
 });
+
+let data;
+
+const viewItems = async() => {
+  switch (props.view) {
+    case 'activities':
+      data = await store.getActivities();
+      router.push('Activities')
+      console.log(data);
+      break;
+    case 'items':
+      data = await store.getItems();
+      console.log(data);
+      break;
+  
+    default:
+      break;
+  }
+  
+}
 
 </script>
 

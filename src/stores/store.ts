@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjozLCJuYW1lIjoiR2FsbyIsInBob25lIjoiMTIzNDUiLCJlbWFpbCI6ImFkbWluQGFkbWluLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJGV6VktxWHRjQTRGcEJPZ1hFNXUub2UvZHhzR0duVjVpQTRkaTJ3eGVOWTYzMTBpS1I0RVEuIiwiY3JlYXRlZEF0IjoiMjAyMy0wMi0xNFQwMjoyNzoyOS4wMDBaIiwidXBkYXRlZEF0IjoiMjAyMy0wMi0xNFQwMjoyNzoyOS4wMDBaIn0sImlhdCI6MTY3Njg1MjQ0NywiZXhwIjoxNjc2ODU3NjMxfQ.XH_6087WqdwKKgyrv-qTJX03x5_JPU9EDIwC6RYHvrg'
+const token = localStorage.getItem('access_token') || null;
 
 const apiReq = axios.create({
   baseURL: "http://localhost:3000/api",
@@ -17,10 +17,31 @@ export const useStore = defineStore('store', {
       apiReq : apiReq
     }
   },
+  getters: {
+    loggedIn() {
+      return token !== null
+    }
+  },
   actions: {
     async getCategories() {
       try {
         const { data } = await this.apiReq.get('/activityTypes');
+        return data;
+      } catch (error) {
+        throw `The api call failed with ${error}`;
+      }
+    },
+    async getActivities() {
+      try {
+        const { data } = await this.apiReq.get('/activities');
+        return data;
+      } catch (error) {
+        throw `The api call failed with ${error}`;
+      }
+    },
+    async getItems() {
+      try {
+        const { data } = await this.apiReq.get('/items');
         return data;
       } catch (error) {
         throw `The api call failed with ${error}`;
@@ -32,9 +53,19 @@ export const useStore = defineStore('store', {
           email,
           password
         });
+        localStorage.setItem('access_token', data.token)
         return data;
       } catch (error) {
-        throw `The login failed with ${error}`;
+          return error;
+      }
+    },
+    async logout() {
+      try {
+        const { data } = await this.apiReq.get('/login');
+        localStorage.removeItem('access_token');
+        return data;
+      } catch (error) {
+        throw `Logout error with ${error}`;
       }
     }
   },

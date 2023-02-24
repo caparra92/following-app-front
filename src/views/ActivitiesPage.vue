@@ -18,7 +18,7 @@
             <ion-row>
                 <ion-col>
                     <div v-for="{ id, name } in categories" :key="id">
-                        <category-badge :activityType="name" view="items"/>
+                        <category-badge :activityType="name" view="activities"/>
                     </div>
                 </ion-col>
             </ion-row>
@@ -47,7 +47,7 @@ const categories = ref([])
 const store = useStore();
 
 onMounted(async()=> {
- categories.value = await store.getCategories();
+ categories.value = await store.getActivities();
 });
 
 const logout = async() => {

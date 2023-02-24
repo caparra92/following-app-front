@@ -238,6 +238,7 @@ http://ionicframework.com/docs/theming/ */
 ion-item {
   --highlight-color-focused: transparent;
   --border-width: 0px;
+  --border-style: none;
 }
 
 ion-input {
