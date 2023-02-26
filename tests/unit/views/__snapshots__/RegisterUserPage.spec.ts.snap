@@ -14,44 +14,30 @@ exports[`Register Page tests Verify HTML structure 1`] = `
           <p class="title">Register</p>
         </ion-col>
       </ion-row>
-      <form action="">
+      <form>
         <ion-list class="">
-          <ion-row class="">
+          <ion-row class="" type="text">
             <ion-col class="">
-              <ion-item class="">
-                <ion-input class=""></ion-input>
-              </ion-item>
+              <ion-item class=""><input type="text" placeholder="Name" class="field"></ion-item>
             </ion-col>
           </ion-row>
-          <!-- <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-input placeholder="Phone">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row> -->
-          <ion-row class="">
+          <ion-row class="" type="email">
             <ion-col class="">
-              <ion-item class="">
-                <ion-input class=""></ion-input>
-              </ion-item>
+              <ion-item class=""><input type="email" placeholder="Email" class="field"></ion-item>
             </ion-col>
           </ion-row>
-          <ion-row class="">
+          <!--v-if-->
+          <ion-row class="" type="password">
             <ion-col class="">
-              <ion-item class="">
-                <ion-input class=""></ion-input>
-              </ion-item>
+              <ion-item class=""><input type="password" placeholder="Password" class="field"></ion-item>
             </ion-col>
           </ion-row>
-          <ion-row class="">
+          <ion-row class="" type="password">
             <ion-col class="">
-              <ion-item class="">
-                <ion-input class=""></ion-input>
-              </ion-item>
+              <ion-item class=""><input type="password" placeholder="Password confirmation" class="field"></ion-item>
             </ion-col>
           </ion-row>
+          <!--v-if-->
           <ion-row class="">
             <ion-col class="">
               <ion-item class="">
