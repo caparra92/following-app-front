@@ -4,7 +4,7 @@
           <ion-grid class="container">
               <ion-row>
                 <ion-col>
-                  <div class="multi-button">
+                  <div class="multi-button" v-if="!isLogged">
                     <button class="multi-button_button toggle" @click="changeView">Login</button>
                     <button class="multi-button_button toggle" disabled>Register</button>
                   </div>
@@ -13,52 +13,18 @@
               <ion-row>
                 <ion-col><p class="title">Register</p></ion-col>
               </ion-row>
-              <form action="">
+              <form>
                 <ion-list>
+                  <base-input type="text" label="Name" v-model="form.name" ref="name"></base-input>
+                  <base-input type="email" label="Email" v-model="form.email" @input="validate"></base-input>
+                  <span class="validation" v-if="!emailInvalid">Invalid email</span>
+                  <base-input type="password" label="Password" v-model="form.password"></base-input>
+                  <base-input type="password" label="Password confirmation" v-model="form.passwordConfirmation"></base-input>
+                  <span class="validation" v-if="!passwordInvalid">Passwords did not match</span>
                 <ion-row>
                   <ion-col>
                     <ion-item>
-                      <ion-input placeholder="Name">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-                <!-- <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-input placeholder="Phone">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row> -->
-                <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-input placeholder="Email">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-input type="password" placeholder="Password">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-input type="password" placeholder="Password confirmation">
-                      </ion-input>
-                    </ion-item>
-                  </ion-col>
-                </ion-row>
-                <ion-row>
-                  <ion-col>
-                    <ion-item>
-                      <ion-button>Enter</ion-button>
+                      <ion-button @click="createUser">Enter</ion-button>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -71,21 +37,108 @@
 
 <script setup>
 import router from "../router";
+import { ref } from 'vue';
+import BaseInput from '../components/BaseInput';
+import { useStore } from '../stores/store';
+import { useUsers } from '../stores/users';
 import {
   IonPage,
   IonContent,
   IonList,
   IonItem,
-  IonInput,
   IonButton,
   IonGrid,
   IonRow,
-  IonCol
+  IonCol,
+  alertController
 } from "@ionic/vue";
+
+const store = useStore();
+const usersStore = useUsers();
+const isLogged = ref(store.loggedIn);
+const passwordInvalid = ref(true);
+const emailInvalid = ref(true);
+const name = ref(null);
+
+
+const form = ref({
+  name: '',
+  email: '',
+  password: '',
+  passwordConfirmation: '',
+  message: ''
+});
 
 const changeView = () => {
   router.push("Login");
 };
+
+const validateEmail = (email) => {
+  if (form.value.email) {
+    return form.value.email.match(
+      /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
+    );
+  }
+};
+
+const validate = (ev) => {
+  const value = ev.target.value;
+
+  if (value === "") return;
+
+  validateEmail(value)
+    ? (emailInvalid.value = true)
+    : (emailInvalid.value = false);
+};
+
+
+const errorAlert = async (message) => {
+  const alert = await alertController.create({
+    header: "Error",
+    message: message,
+    buttons: ["Try again"],
+  });
+
+  await alert.present();
+};
+
+const successAlert = async (message) => {
+  const alert = await alertController.create({
+    header: "Success",
+    message: message,
+    buttons: ["Ok"],
+  });
+
+  await alert.present();
+};
+
+const createUser = async() => {
+  try {
+    if(form.value.password != form.value.passwordConfirmation) {
+      passwordInvalid.value = false;
+      return;
+    }
+    const data = await usersStore.createUser(form.value.name, form.value.email, form.value.password);
+    successAlert( `User ${data.user.email} created`);
+    clearForm();
+    const { response } = data;
+    if (response) {
+      const error = response.data.msg;
+      errorAlert(error);
+    }
+  } catch (error) {
+    form.value.message = error;
+    throw `Register failed with error ${error}`;
+  }
+  
+}
+
+const clearForm = () => {
+  form.value.name = '';
+  form.value.email = '';
+  form.value.password = '';
+  form.value.passwordConfirmation = '';
+}
 </script>
 
 <style scoped>
@@ -133,43 +186,13 @@ const changeView = () => {
     color: var(--ion-color-light);
   }
 
-  .title {
+  .validation {
+    display: inline-block;
+    margin: 0 1.2em;
+    text-align: left;
+    width: 77%;
+    color: var(--ion-color-danger);
     font-family: 'Outfit', sans-serif;
-    color: var(--ion-color-primary);
-    font-size: 30px;
-    font-weight: 400;
-  }
-  
-  ion-input {
-    background-color: var(--ion-color-secondary);
-    color: var(--ion-color-primary);
-    height: 4em;
-    border-radius: 7px;
-    outline: none;
-    margin: .8em 1.2em;
-    transition: all 0.30s ease-in-out;
-  }
-  
-  ion-input:focus {
-    box-shadow: 0 0 5px rgba(var(--ion-color-primary-rgb), 1);
-    padding: 3px 0px 3px 3px;
-    margin: 5px 1px 3px 0px;
-    border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
-  }
-  
-  ion-icon {
-    position: absolute;
-    right: 0;
-    padding: .4em;
-  }
-  
-  ion-button {
-    font-family: 'Outfit', sans-serif;
-    text-transform: capitalize;
-    width: 100%;
-    height: 4em;
-    margin: 1.2em 1.2em 0 1.2em;
-    font-size: 1em;
-    border-radius: 7px;
+    border-top: 1px solid;
   }
 </style>
