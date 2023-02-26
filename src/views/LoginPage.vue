@@ -19,7 +19,7 @@
           <ion-list>
             <ion-row>
               <ion-col>
-                <ion-item ref="item">
+                <ion-item>
                   <ion-input
                     class="has-focus"
                     v-model="form.email"
@@ -67,13 +67,11 @@ import {
   IonContent,
   IonList,
   IonItem,
-  IonInput,
   IonIcon,
   IonButton,
   IonGrid,
   IonRow,
   IonCol,
-  IonNote,
   alertController,
 } from "@ionic/vue";
 import { lockClosedOutline, personCircleOutline } from "ionicons/icons";
@@ -81,7 +79,6 @@ import { useStore } from "../stores/store";
 import { ref } from "vue";
 
 const store = useStore();
-const item = ref(null);
 
 const form = ref({
   email: null,
