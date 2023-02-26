@@ -28,8 +28,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/register',
     name: 'Register',
-    component: RegisterUserPage,
-    beforeEnter: loggedIn,
+    component: RegisterUserPage
   },
   {
     path: '/dashboard',
