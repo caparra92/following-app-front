@@ -17,35 +17,9 @@
         </ion-row>
         <form>
           <ion-list>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  <ion-input
-                    class="has-focus"
-                    v-model="form.email"
-                    placeholder="email@domain.com"
-                    @ionInput="validate"
-                  >
-                    <ion-icon
-                      size="large"
-                      :icon="personCircleOutline"
-                    ></ion-icon>
-                  </ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
-            <p class="input-invalid" v-if="!form.isValid">
-              <span>Invalid email</span>
-            </p>
-            <ion-row>
-              <ion-col>
-                <ion-item>
-                  <ion-input type="password" v-model="form.password">
-                    <ion-icon size="large" :icon="lockClosedOutline"></ion-icon>
-                  </ion-input>
-                </ion-item>
-              </ion-col>
-            </ion-row>
+            <base-input type="email" label="Email" v-model="form.email" @input="validate"></base-input>
+              <span class="validation" v-if="!emailInvalid">Invalid email</span>
+              <base-input type="password" label="Password" v-model="form.password" :icon="lockClosedOutline"></base-input>
             <ion-row>
               <ion-col>
                 <ion-item>
@@ -60,8 +34,9 @@
   </ion-page>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import router from "../router";
+import BaseInput from '../components/BaseInput.vue';
 import {
   IonPage,
   IonContent,
@@ -79,11 +54,11 @@ import { useStore } from "../stores/store";
 import { ref } from "vue";
 
 const store = useStore();
+const emailInvalid = ref(true);
 
 const form = ref({
   email: null,
   password: null,
-  isValid: true,
   message: null,
 });
 
@@ -105,8 +80,8 @@ const validate = (ev) => {
   if (value === "") return;
 
   validateEmail(value)
-    ? (form.value.isValid = true)
-    : (form.value.isValid = false);
+    ? (emailInvalid.value = true)
+    : (emailInvalid.value = false);
 };
 
 const presentAlert = async (message) => {
@@ -125,18 +100,25 @@ const login = async () => {
     if (!validateEmail(form.value.email)) return;
 
     const data = await store.login(form.value.email, form.value.password);
+    if (data.user != null) {
+      router.push('Dashboard');
+    }
     const { response } = data;
     if (response) {
       const error = response.data.error;
       presentAlert(error);
-      }
-    //console.log(data);
-    router.push('Dashboard');
+      clearForm();
+    }
   } catch (error) {
     form.value.message = error;
     throw `Login failed with error ${error}`;
   }
 };
+
+const clearForm = () => {
+  form.value.email = '';
+  form.value.password = '';
+}
 </script>
 
 <style scoped>

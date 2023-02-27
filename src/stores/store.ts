@@ -23,14 +23,6 @@ export const useStore = defineStore('store', {
     }
   },
   actions: {
-    async getCategories() {
-      try {
-        const { data } = await this.apiReq.get('/activityTypes');
-        return data;
-      } catch (error) {
-        throw `The api call failed with ${error}`;
-      }
-    },
     async getActivities() {
       try {
         const { data } = await this.apiReq.get('/activities');

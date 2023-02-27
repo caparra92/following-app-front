@@ -20,12 +20,17 @@
 import router from "../router";
 import { IonGrid, IonRow, IonCol, IonIcon, IonButton } from '@ionic/vue';
 import { addOutline, chevronForwardOutline } from 'ionicons/icons';
-import { defineProps } from 'vue';
-import { useStore } from '../stores/store';
+import { defineProps, h, ref } from 'vue';
+import { useActivityTypes } from '../stores/activityTypes';
+import { useActivities } from '../stores/activities';
 
-const store = useStore();
+const activityTypes = useActivityTypes();
+const activities = useActivities();
 
 const props = defineProps({
+  id: {
+    type: String
+  },
   activityType: {
     type: String,
     default: "Activity type"
@@ -41,15 +46,14 @@ let data;
 const viewItems = async() => {
   switch (props.view) {
     case 'activities':
-      data = await store.getActivities();
-      router.push('Activities')
-      console.log(data);
+      data = await activityTypes.getActivitiesById(props.id);
+      console.log(data)
+      router.push(`/dashboard/${props.id}/activities`);
       break;
     case 'items':
-      data = await store.getItems();
-      console.log(data);
+      data = await activities.getItemsById(props.id);
+      router.push(`/activities/${props.id}/items`);
       break;
-  
     default:
       break;
   }

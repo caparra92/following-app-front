@@ -17,8 +17,8 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <div v-for="category in categories.activities" :key="category.id" >
-                        <category-badge :activityType="category.name" view="items" :id="category.id"/>
+                    <div v-for="category in categories.items" :key="category.id">
+                        <category-badge :activityType="category.name" view="items"/>
                     </div>
                 </ion-col>
             </ion-row>
@@ -41,18 +41,19 @@ import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from
 import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
 import { useStore } from '../stores/store'
-import { useActivityTypes } from '../stores/activityTypes';
+import { useActivities } from '../stores/activities';
 import { onMounted, ref, on, onBeforeMount } from 'vue';
 
 const categories = ref([])
 
 const store = useStore();
-const activityTypes = useActivityTypes();
+const activities = useActivities();
 
 onMounted(async()=> {
     const route = useRoute();
     const id = route.params.id;
-    categories.value = await activityTypes.getActivitiesById(id);
+    console.log(`Item component id: ${id}`)
+    categories.value = await activities.getItemsById(id);
 });
 
 const logout = async() => {

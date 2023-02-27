@@ -5,6 +5,7 @@ import RegisterUserPage from '../views/RegisterUserPage.vue'
 import LoginPage from '../views/LoginPage.vue';
 import DashboardPage from '../views/DashboardPage.vue';
 import ActivitiesPage from '../views/ActivitiesPage.vue';
+import ItemsPage from '../views/ItemsPage.vue';
 
 const loggedIn = (to: any, from: any, next: any) => {
   const store = useStore();
@@ -22,33 +23,40 @@ const routes: Array<RouteRecordRaw> = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: LoginPage
   },
   {
     path: '/register',
-    name: 'Register',
+    name: 'register',
     component: RegisterUserPage
   },
   {
     path: '/dashboard',
-    name: 'Dashboard',
+    name: 'dashboard',
     component: DashboardPage,
     beforeEnter: loggedIn,
     meta: {
       requiresAuth: true,
-    },
-    children: [ 
-      { 
-        path: '/dashboard/activities', 
-        name: 'Activities',
-        component: ActivitiesPage,
-        beforeEnter: loggedIn,
-        meta: {
-          requiresAuth: true
-        }
-      }
-    ]
+    }
+  },
+  {
+    path: '/dashboard/:id/activities',
+    name: 'activities',
+    component: ActivitiesPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/activities/:id/items',
+    name: 'items',
+    component: ItemsPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
   }
 ]
 
