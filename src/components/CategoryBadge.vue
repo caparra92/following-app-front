@@ -2,7 +2,7 @@
     <ion-row>
       <ion-col size="auto">
         <button @click="newItem">
-          <ion-icon size = "large" :icon="addOutline"></ion-icon>
+          <ion-icon size = "large" :icon="trashBinOutline"></ion-icon>
         </button>
       </ion-col>
       <ion-col>
@@ -19,7 +19,7 @@
 <script setup>
 import router from "../router";
 import { IonGrid, IonRow, IonCol, IonIcon, IonButton } from '@ionic/vue';
-import { addOutline, chevronForwardOutline } from 'ionicons/icons';
+import { addOutline, chevronForwardOutline, trashBinOutline } from 'ionicons/icons';
 import { defineProps, h, ref } from 'vue';
 import { useActivityTypes } from '../stores/activityTypes';
 import { useActivities } from '../stores/activities';
@@ -29,7 +29,7 @@ const activities = useActivities();
 
 const props = defineProps({
   id: {
-    type: String
+    type: [String, Number], 
   },
   activityType: {
     type: String,
@@ -47,7 +47,6 @@ const viewItems = async() => {
   switch (props.view) {
     case 'activities':
       data = await activityTypes.getActivitiesById(props.id);
-      console.log(data)
       router.push(`/dashboard/${props.id}/activities`);
       break;
     case 'items':
