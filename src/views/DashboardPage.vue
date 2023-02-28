@@ -29,6 +29,11 @@
                     </button>
                 </ion-col>
             </ion-row>
+            <ion-row>
+                <ion-col class="add-button-col">
+                    <add-button></add-button>
+                </ion-col>
+            </ion-row>
         </ion-grid>
     </ion-content>
  </ion-page>
@@ -39,6 +44,7 @@ import router from "../router";
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
+import AddButton from '../components/AddButton.vue';
 import { useStore } from '../stores/store';
 import { useActivityTypes } from '../stores/activityTypes';
 import { onMounted, ref } from 'vue';
@@ -54,8 +60,7 @@ onMounted(async()=> {
 
 const logout = async() => {
     const data = await store.logout();
-    router.push('Login');
-    console.log(data);
+    router.push('/login');
 }
 
 </script>
