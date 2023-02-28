@@ -2,6 +2,7 @@
  <ion-page>
     <ion-content>
         <ion-grid class="container">
+            <menu-badge></menu-badge>
             <ion-row>
                 <ion-col>
                     <ion-avatar>
@@ -22,13 +23,6 @@
                     </div>
                 </ion-col>
             </ion-row>
-            <ion-row class="power-off">
-                <ion-col>
-                    <button @click="logout">
-                        <ion-icon size = "large" :icon="powerOutline"></ion-icon>
-                    </button>
-                </ion-col>
-            </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
                     <add-button></add-button>
@@ -39,25 +33,26 @@
  </ion-page>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import router from "../router";
 import { useRoute } from 'vue-router';
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
+import MenuBadge from "../components/MenuBadge.vue";
 import { useStore } from '../stores/store'
 import { useActivityTypes } from '../stores/activityTypes';
-import { onMounted, ref, on, onBeforeMount } from 'vue';
+import { onMounted, ref } from 'vue';
 
-const categories = ref([])
+const categories = ref(<any>[]);
 
 const store = useStore();
 const activityTypes = useActivityTypes();
 
-onMounted(async()=> {
+onMounted(async() => {
     const route = useRoute();
-    const id = route.params.id;
+    const id = <string>route.params.id;
     categories.value = await activityTypes.getActivitiesById(id);
 });
 
