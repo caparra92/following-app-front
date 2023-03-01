@@ -2,6 +2,7 @@
 <ion-page>
       <ion-content>
           <ion-grid class="container">
+            <menu-badge></menu-badge>
               <ion-row>
                 <ion-col>
                   <div class="multi-button" v-if="!isLogged">
@@ -24,7 +25,7 @@
                 <ion-row>
                   <ion-col>
                     <ion-item>
-                      <ion-button @click="createUser">Enter</ion-button>
+                      <ion-button class="single-button" @click="createUser">Enter</ion-button>
                     </ion-item>
                   </ion-col>
                 </ion-row>
@@ -39,6 +40,7 @@
 import router from "../router";
 import { ref } from 'vue';
 import BaseInput from '../components/BaseInput';
+import MenuBadge from "@/components/MenuBadge.vue";
 import { useStore } from '../stores/store';
 import { useUsers } from '../stores/users';
 import {
@@ -159,16 +161,16 @@ const clearForm = () => {
   }
   
   .toggle {
-    margin: 2em 0;
-    width:5em;
+    margin: 1em 0;
+    width: 6em;
     height: 2.3em;
     align-self: center;
-    font-family: 'Outfit', sans-serif;
+    font-family: "Outfit", sans-serif;
     text-transform: capitalize;
     width: 100%;
     height: 4em;
-    margin: 1.2em 1.2em 0 1.2em;
-    font-size: 1em;
+    margin: 1em 0 0 0;
+    font-size: .6em;
     border-radius: 7px;
   }
 
@@ -194,5 +196,6 @@ const clearForm = () => {
     color: var(--ion-color-danger);
     font-family: 'Outfit', sans-serif;
     border-top: 1px solid;
+    font-size: .6em;
   }
 </style>

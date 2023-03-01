@@ -13,17 +13,17 @@ import { addOutline } from 'ionicons/icons';
     justify-content: center;
     align-items: center;
     margin-top: 30px;
-    width: 4em;
-    height: 4em;
+    width: 2em;
+    height: 2em;
     color: var(--ion-color-light);
     background: var(--ion-color-primary);
     border-radius: 50%;
-    transition: all 0.30s ease-in-out;
+    transition: all 0.40s ease-in-out;
 }
 
 .add-button:active {
     background: var(--ion-color-primary-shade);
-    width: 4.2em;
-    height: 4.2em;
+    width: 2.2em;
+    height: 2.2em;
 }
 </style>

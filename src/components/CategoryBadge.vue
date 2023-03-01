@@ -64,7 +64,7 @@ const viewItems = async() => {
 <style scoped>
 
 ion-row {
-  margin: 1em 1.2em;
+  margin: 1em 1em;
 }
 
 ion-col button {
@@ -80,7 +80,7 @@ ion-col button {
 ion-col p {
   font-family: 'Outfit', sans-serif;
   text-transform: capitalize;
-  font-size: 1.5em;
+  font-size: 1em;
   margin: 0 auto;
 }
 

@@ -11,11 +11,11 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
 * {
   font-family: "Outfit", sans-serif;
   text-transform: capitalize;
+  font-size: 30px;
 }
 
 .title {
     color: var(--ion-color-primary);
-    font-size: 30px;
     font-weight: 400;
   }
 
@@ -32,4 +32,12 @@ ion-button {
     justify-content: center;
     align-items: center;
 }
+
+.single-button {
+    width: 100%;
+    height: 3em;
+    margin: 1em;
+    font-size: .8em;
+    border-radius: 7px;
+  }
 </style>

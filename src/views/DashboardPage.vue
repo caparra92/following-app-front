@@ -34,7 +34,6 @@
 </template>
 
 <script setup lang="ts">
-import router from "../router";
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
@@ -45,18 +44,11 @@ import { useActivityTypes } from '../stores/activityTypes';
 import { onMounted, ref } from 'vue';
 
 const categories = ref([])
-
-const store = useStore();
 const activityTypes = useActivityTypes();
 
 onMounted(async()=> {
  categories.value = await activityTypes.getCategories();
 });
-
-const logout = async() => {
-    const data = await store.logout();
-    router.push('/login');
-}
 
 </script>
 
@@ -77,7 +69,7 @@ ion-avatar {
 }
 
 ion-col p {
-    font-size: 30px;
+    font-size: 1em;
     margin: 0;
 }
 

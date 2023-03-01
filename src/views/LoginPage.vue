@@ -19,11 +19,11 @@
           <ion-list>
             <base-input type="email" label="Email" v-model="form.email" @input="validate"></base-input>
               <span class="validation" v-if="!emailInvalid">Invalid email</span>
-              <base-input type="password" label="Password" v-model="form.password" :icon="lockClosedOutline"></base-input>
+              <base-input type="password" label="Password" v-model="form.password"></base-input>
             <ion-row>
               <ion-col>
                 <ion-item>
-                  <ion-button @click="login">Enter</ion-button>
+                  <ion-button @click="login" class="single-button">Enter</ion-button>
                 </ion-item>
               </ion-col>
             </ion-row>
@@ -101,8 +101,9 @@ const login = async () => {
 
     const data = await store.login(form.value.email, form.value.password);
     if (data.user != null) {
-      router.push('Dashboard');
+      router.push('/dashboard');
     }
+    console.log(data.user != null) 
     const { response } = data;
     if (response) {
       const error = response.data.error;
@@ -123,6 +124,7 @@ const clearForm = () => {
 
 <style scoped>
 .container {
+  font-size: 30px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -139,16 +141,16 @@ const clearForm = () => {
 }
 
 .toggle {
-  margin: 2em 0;
-  width: 5em;
+  margin: 1em 0;
+  width: 6em;
   height: 2.3em;
   align-self: center;
   font-family: "Outfit", sans-serif;
   text-transform: capitalize;
   width: 100%;
   height: 4em;
-  margin: 1.2em 1.2em 0 1.2em;
-  font-size: 1em;
+  margin: 1em 0 0 0;
+  font-size: .6em;
   border-radius: 7px;
 }
 
@@ -167,52 +169,19 @@ const clearForm = () => {
 }
 
 .title {
-  font-family: "Outfit", sans-serif;
   color: var(--ion-color-primary);
-  font-size: 30px;
+  font-size: 1em;
   font-weight: 400;
 }
 
-ion-input {
-  background: var(--ion-color-secondary);
-  color: var(--ion-color-primary);
-  height: 4em;
-  border-radius: 7px;
-  outline: none;
-  margin: 1.2em;
-  transition: all 0.3s ease-in-out;
-}
-
-ion-input:focus {
-  box-shadow: 0 0 5px rgba(var(--ion-color-primary-rgb), 1);
-  padding: 3px 0px 3px 3px;
-  margin: 5px 1px 3px 0px;
-  border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
-}
-
-ion-icon {
-  position: absolute;
-  right: 0;
-  padding: 0.4em;
-}
-
-ion-button {
-  font-family: "Outfit", sans-serif;
-  text-transform: capitalize;
-  width: 100%;
-  height: 4em;
-  margin: 1.2em 1.2em 0 1.2em;
-  font-size: 1em;
-  border-radius: 7px;
-}
-
-.input-invalid {
-  color: var(--ion-color-danger);
-  text-align: left;
-  margin: 0 auto;
-  padding-bottom: 2px;
-  width: 78%;
-  border-bottom: 1px solid var(--ion-color-danger);
-  font-size: 0.7em;
-}
+.validation {
+    display: inline-block;
+    margin: 0 1em;
+    padding-top: 0;
+    text-align: left;
+    width: 75%;
+    color: var(--ion-color-danger);
+    font-size: .6em;
+    border-top: 1px solid;
+  }
 </style>

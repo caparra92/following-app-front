@@ -37,7 +37,6 @@
 import router from "../router";
 import { useRoute } from 'vue-router';
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "../components/MenuBadge.vue";

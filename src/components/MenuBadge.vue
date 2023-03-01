@@ -1,15 +1,15 @@
 <template>
-  <ion-menu content-id="main-content">
+  <ion-menu content-id="main-content" size="large">
     <ion-header>
-      <ion-toolbar>
-        <ion-title>Following App</ion-title>
+      <ion-toolbar color="secondary">
+        <ion-title><ion-icon :icon="statsChartOutline" class="icon"></ion-icon></ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <ul class="menu-list">
-        <li><ion-icon :icon="listOutline" size="large"></ion-icon>Categories</li>
-        <li><ion-icon :icon="personAddOutline" size="large"></ion-icon>Register</li>
-        <li><ion-icon :icon="powerOutline" size="large"></ion-icon>Logout</li>
+        <router-link to="/dashboard"><li><ion-icon :icon="listOutline" size="large"></ion-icon>Categories</li></router-link>
+        <router-link to="/register"><li><ion-icon :icon="personAddOutline" size="large"></ion-icon>Register</li></router-link>
+        <li @click="logout"><ion-icon :icon="powerOutline" size="large"></ion-icon>Logout</li>
       </ul>
     </ion-content>
   </ion-menu>
@@ -25,6 +25,8 @@
 </template>
 
 <script setup lang="ts"> 
+  import router from "../router";
+  import { useStore } from "@/stores/store";
   import {
     IonContent,
     IonHeader,
@@ -36,11 +38,18 @@
     IonPage,
     IonIcon
   } from '@ionic/vue';
-  import { listOutline, personAddOutline, powerOutline } from 'ionicons/icons'
+  import { listOutline, personAddOutline, powerOutline, statsChartOutline } from 'ionicons/icons';
   
+  const store = useStore();
+  
+  const logout = async() => {
+    const data = await store.logout();
+    router.push('/login');
+}
 </script>
 <style scoped>
 .menu-list {
+  font-size: 30px;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -50,17 +59,27 @@
   border: none;
 }
 
-.menu-list > li {
+.menu-list li {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 4em;
+  height: 3em;
   list-style: none;
   padding: 8px;
-  line-height: 3;
+  line-height: 1.2;
+  cursor: pointer;
 }
 
-li > ion-icon {
+.menu-list a {
+  text-decoration: none;
+  font-size: .8em;
+}
+
+li ion-icon {
   padding-top: 8px;
+}
+
+.icon {
+  padding-top: 10px;
 }
 </style>
