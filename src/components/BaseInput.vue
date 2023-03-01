@@ -3,12 +3,32 @@
     <ion-col>
       <ion-item class="container">
         <input
+          v-if="$attrs.type == 'email' || $attrs.type == 'password' || $attrs.type == 'text' || $attrs.type == 'number'"
           v-bind="$attrs"
           :placeholder="label"
           :value="modelValue"
           class="field"
           @input="$emit('update:modelValue', $event.target.value)"
         />
+        <textarea 
+          v-else-if="$attrs.type == 'textarea'"
+          cols={{cols}} 
+          rows={{rows}}
+          v-bind="$attrs"
+          :placeholder="label"
+          :value="modelValue"
+          class="field"
+          @input="$emit('update:modelValue', $event.target.value)"
+        ></textarea>
+        <select
+          v-else
+          v-bind="$attrs"
+          :placeholder="label"
+          :value="modelValue"
+          class="field"
+          @input="$emit('update:modelValue', $event.target.value)"
+        >
+        </select>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -24,6 +44,14 @@ const props = defineProps({
   modelValue: {
     type: [String, Number],
     default: "",
+  },
+  cols: {
+    type: String,
+    default: "10"
+  },
+  rows: {
+    type: String,
+    default: "15"
   }
 });
 </script>

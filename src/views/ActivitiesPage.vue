@@ -25,7 +25,7 @@
             </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
-                    <add-button></add-button>
+                    <add-button @click="addActivity"></add-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -58,6 +58,10 @@ onMounted(async() => {
 const logout = async() => {
     const data = await store.logout();
     router.push('/login');
+}
+
+const addActivity = () => {
+    router.push('/activities/new');
 }
 
 </script>

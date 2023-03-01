@@ -37,6 +37,18 @@ export const useActivities = defineStore('activities', {
               } catch (error) {
                 throw `The api call failed with ${error}`;
               }
-        }   
+        },
+        async addActivity(name: string, description: string, activityTypeId: string) {
+          try {
+            const { data } = await this.apiReq.post(`/activities`, {
+              name,
+              description,
+              activityTypeId
+            });
+            return data;
+          } catch (error) {
+            return error;
+          }
+        }     
     }
   });

@@ -25,7 +25,7 @@
             </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
-                    <add-button></add-button>
+                    <add-button @click="addCategory"></add-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -35,13 +35,13 @@
 
 <script setup lang="ts">
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from '../components/MenuBadge.vue';
 import { useStore } from '../stores/store';
 import { useActivityTypes } from '../stores/activityTypes';
 import { onMounted, ref } from 'vue';
+import router from '@/router';
 
 const categories = ref([])
 const activityTypes = useActivityTypes();
@@ -49,6 +49,10 @@ const activityTypes = useActivityTypes();
 onMounted(async()=> {
  categories.value = await activityTypes.getCategories();
 });
+
+const addCategory = () => {
+    router.push('/activityTypes/new');
+}
 
 </script>
 

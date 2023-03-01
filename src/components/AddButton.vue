@@ -6,6 +6,7 @@
 <script setup lang="ts">
 import { IonIcon } from '@ionic/vue';
 import { addOutline } from 'ionicons/icons';
+
 </script>
 <style scoped>
 .add-button {
