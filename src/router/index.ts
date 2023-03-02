@@ -8,6 +8,7 @@ import ActivitiesPage from '../views/ActivitiesPage.vue';
 import ItemsPage from '../views/ItemsPage.vue';
 import RegisterActivityTypePage from "../views/RegisterActivityTypePage.vue";
 import RegisterActivityPage from "../views/RegisterActivityPage.vue";
+import RegisterItemPage from "../views/RegisterItemPage.vue";
 
 const loggedIn = (to: any, from: any, next: any) => {
   const store = useStore();
@@ -73,6 +74,15 @@ const routes: Array<RouteRecordRaw> = [
     path: '/activities/new',
     name: 'addActivity',
     component: RegisterActivityPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/items/new',
+    name: 'addItem',
+    component: RegisterItemPage,
     beforeEnter: loggedIn,
     meta: {
       requiresAuth: true

@@ -1,14 +1,15 @@
 <template>
-  <ion-row>
+    <ion-row>
     <ion-col>
       <ion-item class="container">
-        <input
+        <select
           v-bind="$attrs"
-          :placeholder="label"
-          :value="modelValue"
-          class="field"
-          @input="$emit('update:modelValue', $event.target.value)"
-        />
+          class="field field-select"
+          @select="$emit('update:modelValue', $event.target.value)"
+        >
+        <option selected value="">Select an option...</option>    
+        <option :value="option.id" v-for="option in modelValue" :key="option.id">{{ option.name }}</option>
+        </select>
       </ion-item>
     </ion-col>
   </ion-row>
@@ -22,7 +23,7 @@ const props = defineProps({
     default: "",
   },
   modelValue: {
-    type: [String, Number],
+    type: [Object, Array, String, Number],
     default: "",
   }
 });
@@ -33,4 +34,5 @@ const props = defineProps({
   padding: 0;
   margin: 0;
 }
+
 </style>

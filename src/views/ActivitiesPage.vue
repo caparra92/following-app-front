@@ -2,7 +2,7 @@
  <ion-page>
     <ion-content>
         <ion-grid class="container">
-            <menu-badge></menu-badge>
+           <menu-badge></menu-badge>
             <ion-row>
                 <ion-col>
                     <ion-avatar>
@@ -37,9 +37,10 @@
 import router from "../router";
 import { useRoute } from 'vue-router';
 import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import CategoryBadge from '../components/CategoryBadge.vue';
-import AddButton from '../components/AddButton.vue';
-import MenuBadge from "../components/MenuBadge.vue";
+import CategoryBadge from '@/components/CategoryBadge.vue';
+import AddButton from '@/components/AddButton.vue';
+import MenuBadge from "@/components/MenuBadge.vue";
+import GoBackButton from "@/components/GoBackButton.vue";
 import { useStore } from '../stores/store'
 import { useActivityTypes } from '../stores/activityTypes';
 import { onMounted, ref } from 'vue';
@@ -54,11 +55,6 @@ onMounted(async() => {
     const id = <string>route.params.id;
     categories.value = await activityTypes.getActivitiesById(id);
 });
-
-const logout = async() => {
-    const data = await store.logout();
-    router.push('/login');
-}
 
 const addActivity = () => {
     router.push('/activities/new');

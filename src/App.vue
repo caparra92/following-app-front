@@ -40,4 +40,23 @@ ion-button {
     font-size: .8em;
     border-radius: 7px;
   }
+
+  .field {
+    width: 100%;
+    font-size: .6em;
+    text-transform: lowercase;
+    background-color: var(--ion-color-secondary);
+    color: var(--ion-color-primary);
+    height: 4em;
+    border: 1px solid rgba(var(--ion-color-primary-rgb), 1);
+    border-radius: 7px;
+    outline: none;
+    margin: 1em;
+    transition: all 0.30s ease-in-out;
+  }
+
+  .field:focus {
+    box-shadow: 0 0 3px rgba(var(--ion-color-primary-rgb), 1);
+    border: 2px solid rgba(var(--ion-color-primary-rgb), 1);
+  }
 </style>

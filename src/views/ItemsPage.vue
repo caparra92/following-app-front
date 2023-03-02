@@ -25,7 +25,7 @@
             </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
-                    <add-button></add-button>
+                    <add-button @click="addItem"></add-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -56,9 +56,8 @@ onMounted(async()=> {
     categories.value = await activities.getItemsById(id);
 });
 
-const logout = async() => {
-    const data = await store.logout();
-    router.push('/login');
+const addItem = () => {
+    router.push('/items/new');
 }
 
 </script>

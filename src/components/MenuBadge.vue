@@ -19,6 +19,9 @@
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
+        <template v-if="$route.name != 'dashboard'">
+          <go-back-button class="back-button"></go-back-button>
+        </template>
       </ion-toolbar>
     </ion-header>
   </ion-page>
@@ -27,6 +30,7 @@
 <script setup lang="ts"> 
   import router from "../router";
   import { useStore } from "@/stores/store";
+  import GoBackButton from "./GoBackButton.vue";
   import {
     IonContent,
     IonHeader,
@@ -81,5 +85,11 @@ li ion-icon {
 
 .icon {
   padding-top: 10px;
+}
+
+.back-button {
+  position: absolute;
+  right: 10px;
+  top: 5px;
 }
 </style>

@@ -4,7 +4,7 @@
               <ion-grid class="container">
                 <menu-badge></menu-badge>
                   <ion-row>
-                    <ion-col><p class="title">New Activity</p></ion-col>
+                    <ion-col><p class="title">New Item</p></ion-col>
                   </ion-row>
                   <form>
                     <ion-list>
@@ -14,7 +14,7 @@
                     <ion-row>
                       <ion-col>
                         <ion-item>
-                          <ion-button class="single-button" @click="addActivity">Enter</ion-button>
+                          <ion-button class="single-button" @click="addItem">Enter</ion-button>
                         </ion-item>
                       </ion-col>
                     </ion-row>
@@ -32,7 +32,7 @@
     import BaseSelect from '@/components/BaseSelect.vue';
     import BaseTextArea from '@/components/BaseTextArea.vue';
     import { useActivities } from '@/stores/activities';
-    import { useActivityTypes } from '@/stores/activityTypes';
+    import { useItems } from '@/stores/items';
     import {
       IonPage,
       IonContent,
@@ -49,21 +49,21 @@
 
 
     onMounted(async() => {
-      const data = await activityTypes.getCategories();
+      const data = await activities.getActivities();
       categories.value.push(data);
     });
     
     const activities = useActivities();
-    const activityTypes = useActivityTypes();
+    const items = useItems();
 
     const selected = (event: any) => {
-      form.value.categoryId = event.target.value;
+      form.value.activityId = event.target.value;
     }
   
     const form = ref({
       name: '',
       description: '',
-      categoryId: '',
+      activityId: '',
       message: ''
     });
 
@@ -77,10 +77,10 @@
       await alert.present();
     };
     
-    const addActivity = async() => {
+    const addItem = async() => {
       try {
-        const data = await activities.addActivity(form.value.name, form.value.description, form.value.categoryId);
-        successAlert( `Activity ${data.activity.name} created`);
+        const data = await items.addItem(form.value.name, form.value.description, form.value.activityId);
+        successAlert( `Item ${data.item.name} created`);
         clearForm();
       } catch (error: any) {
         form.value.message = error;

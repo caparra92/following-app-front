@@ -80,8 +80,9 @@ ion-col button {
 ion-col p {
   font-family: 'Outfit', sans-serif;
   text-transform: capitalize;
-  font-size: 1em;
+  font-size: .6em;
   margin: 0 auto;
+  line-height: 2.3;
 }
 
 ion-icon{
