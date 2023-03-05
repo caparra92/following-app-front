@@ -19,13 +19,13 @@
             <ion-row>
                 <ion-col>
                     <div v-for="category in categories.items" :key="category.id">
-                        <category-badge :activityType="category.name" view="items"/>
+                        <category-badge :activityType="category.name" view="items" :id="category.id" @remove-item="removeItem"/>
                     </div>
                 </ion-col>
             </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
-                    <add-button @click="addItem"></add-button>
+                    <add-button @click.prevent="addItem"></add-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -36,19 +36,23 @@
 <script setup lang="ts">
 import router from "../router";
 import { useRoute } from 'vue-router';
-import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol, alertController } from '@ionic/vue';
 import { powerOutline } from 'ionicons/icons'
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
 import { useStore } from '../stores/store'
 import { useActivities } from '../stores/activities';
+import { useItems } from "@/stores/items";
 import { onMounted, ref } from 'vue';
 
-const categories = ref(<any>[])
+const categories = ref(<any>[]);
+const handlerMessage = ref('');
 
 const store = useStore();
 const activities = useActivities();
+const items = useItems();
+let data: any;
 
 onMounted(async()=> {
     const route = useRoute();
@@ -59,6 +63,53 @@ onMounted(async()=> {
 const addItem = () => {
     router.push('/items/new');
 }
+
+const removeItem = async (id: string) => {
+    try {
+        await deleteAlert();
+        if(handlerMessage.value == 'confirm') {
+            data = await items.removeItem(id);
+            await successAlert(data.message); 
+        }    
+    } catch (error) {
+        throw `Error during removing with ${error}`;
+    }
+}
+
+const deleteAlert = async () => {
+        const alert = await alertController.create({
+          header: 'Do you want to delete?',
+          buttons: [
+            {
+              text: 'No',
+              role: 'cancel',
+              handler: () => {
+                handlerMessage.value = 'cancel';
+              },
+            },
+            {
+              text: 'Yes',
+              role: 'confirm',
+              handler: () => {
+                handlerMessage.value = 'confirm';
+              },
+            },
+          ],
+        });
+        await alert.present();  
+        const { role }: any = await alert.onDidDismiss();
+        handlerMessage.value = role;
+};
+
+const successAlert = async (message: string) => {
+      const alert = await alertController.create({
+        header: "Success",
+        message: message,
+        buttons: ["Ok"],
+      });
+    
+      await alert.present();
+    };
 
 </script>
 

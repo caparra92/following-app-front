@@ -41,6 +41,14 @@ export const useItems = defineStore('items', {
           } catch (error) {
             return error;
           }
+        },
+        async removeItem(id : string) {
+          try {
+            const { data } = await this.apiReq.delete(`/items/${id}`);
+            return data;
+          } catch (error) {
+            return error;
+          }
         }     
     }
   });

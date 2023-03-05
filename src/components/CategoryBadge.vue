@@ -1,7 +1,7 @@
 <template>
     <ion-row>
       <ion-col size="auto">
-        <button @click="newItem">
+        <button @click.prevent="$emit('removeItem', id)">
           <ion-icon size = "large" :icon="trashBinOutline"></ion-icon>
         </button>
       </ion-col>
