@@ -10,7 +10,7 @@
                     <ion-list>
                       <base-input type="text" label="Name" v-model="form.name"></base-input>
                       <base-text-area placeholder="Description" v-model="form.description" col="5" row="15"></base-text-area>
-                      <base-select v-model="categories[0]" @input = "selected"></base-select>
+                      <base-select v-model="categories" @input = "selected" :selectedValue="categories[0]"></base-select>
                     <ion-row>
                       <ion-col>
                         <ion-item>
@@ -26,6 +26,7 @@
     </template>
     
     <script setup lang="ts">
+    import router from '@/router';
     import { onMounted, ref } from 'vue';
     import BaseInput from '../components/BaseInput.vue';
     import MenuBadge from "@/components/MenuBadge.vue";
@@ -49,8 +50,8 @@
 
 
     onMounted(async() => {
-      const data = await activities.getActivities();
-      categories.value.push(data);
+      categories.value = await activities.getActivities();
+      console.log(categories.value[0].name)
     });
     
     const activities = useActivities();
@@ -81,7 +82,9 @@
       try {
         const data = await items.addItem(form.value.name, form.value.description, form.value.activityId);
         successAlert( `Item ${data.item.name} created`);
+        items.items.push(data.item);
         clearForm();
+        router.go(-1);
       } catch (error: any) {
         form.value.message = error;
         throw `Register failed with error ${error}`;

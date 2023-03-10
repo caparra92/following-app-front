@@ -7,7 +7,7 @@
           class="field field-select"
           @select="$emit('update:modelValue', $event.target.value)"
         >
-        <option selected value="">Select an option...</option>    
+        <option value="">Select an option...</option>
         <option :value="option.id" v-for="option in modelValue" :key="option.id">{{ option.name }}</option>
         </select>
       </ion-item>
@@ -15,7 +15,11 @@
   </ion-row>
 </template>
 <script setup>
+import { onMounted } from 'vue';
 import { IonRow, IonCol, IonItem, IonIcon } from '@ionic/vue';
+onMounted(() => {
+  const selectedValue = props.modelValue[0];
+});
 
 const props = defineProps({
   label: {

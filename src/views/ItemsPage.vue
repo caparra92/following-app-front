@@ -18,7 +18,7 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <div v-for="category in categories.items" :key="category.id">
+                    <div v-for="category in categories" :key="category.id">
                         <category-badge :activityType="category.name" view="items" :id="category.id" @remove-item="removeItem"/>
                     </div>
                 </ion-col>
@@ -36,12 +36,10 @@
 <script setup lang="ts">
 import router from "../router";
 import { useRoute } from 'vue-router';
-import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol, alertController } from '@ionic/vue';
-import { powerOutline } from 'ionicons/icons'
+import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, alertController } from '@ionic/vue';
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
-import { useStore } from '../stores/store'
 import { useActivities } from '../stores/activities';
 import { useItems } from "@/stores/items";
 import { onMounted, ref } from 'vue';
@@ -49,7 +47,6 @@ import { onMounted, ref } from 'vue';
 const categories = ref(<any>[]);
 const handlerMessage = ref('');
 
-const store = useStore();
 const activities = useActivities();
 const items = useItems();
 let data: any;
@@ -57,7 +54,8 @@ let data: any;
 onMounted(async()=> {
     const route = useRoute();
     const id = <string>route.params.id;
-    categories.value = await activities.getItemsById(id);
+    await items.getItemsByActivityId(id);
+    categories.value = items.getItems;
 });
 
 const addItem = () => {
