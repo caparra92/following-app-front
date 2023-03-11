@@ -18,8 +18,8 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <div v-for="{ id, name } in categories" :key="id">
-                        <category-badge :activityType="name" view="activities" :id="id"/>
+                    <div v-for="category in categories" :key="category.id">
+                        <category-badge :activityType="category.name" view="activities" :id="category.id" @remove-item="removeItem"/>
                     </div>
                 </ion-col>
             </ion-row>
@@ -38,20 +38,35 @@ import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from '../components/MenuBadge.vue';
-import { useStore } from '../stores/store';
 import { useActivityTypes } from '../stores/activityTypes';
+import { deleteAlert, successAlert } from '../helpers/alerts';
 import { onMounted, ref } from 'vue';
 import router from '@/router';
 
-const categories = ref([])
+const categories = ref(<any>[]);
 const activityTypes = useActivityTypes();
+const handlerMessage = ref('');
+let data: any;
 
 onMounted(async()=> {
- categories.value = await activityTypes.getCategories();
+ await activityTypes.getCategories();
+ categories.value = activityTypes.getActivityTypes;
 });
 
 const addCategory = () => {
     router.push('/activityTypes/new');
+}
+
+const removeItem = async (id: string) => {
+    try {
+        await deleteAlert(handlerMessage, activityTypes);
+        if(handlerMessage.value == 'confirm') {
+            data = await activityTypes.removeActivityType(id);
+            await successAlert(data.message); 
+        }    
+    } catch (error) {
+        throw `Error during removing with ${error}`;
+    }
 }
 
 </script>

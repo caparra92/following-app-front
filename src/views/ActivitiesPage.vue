@@ -18,8 +18,8 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <div v-for="category in categories.activities" :key="category.id" >
-                        <category-badge :activityType="category.name" view="items" :id="category.id"/>
+                    <div v-for="category in categories" :key="category.id" >
+                        <category-badge :activityType="category.name" view="items" :id="category.id" @remove-item="removeItem"/>
                     </div>
                 </ion-col>
             </ion-row>
@@ -40,24 +40,37 @@ import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from
 import CategoryBadge from '@/components/CategoryBadge.vue';
 import AddButton from '@/components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
-import GoBackButton from "@/components/GoBackButton.vue";
-import { useStore } from '../stores/store'
-import { useActivityTypes } from '../stores/activityTypes';
+import { useActivities } from "../stores/activities";
 import { onMounted, ref } from 'vue';
+import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
+const handlerMessage = ref('');
 
-const store = useStore();
-const activityTypes = useActivityTypes();
+const activities = useActivities();
+let data: any;
 
 onMounted(async() => {
     const route = useRoute();
     const id = <string>route.params.id;
-    categories.value = await activityTypes.getActivitiesById(id);
+    await activities.getActivitiesByTypeId(id);
+    categories.value = activities.getAllActivities;
 });
 
 const addActivity = () => {
     router.push('/activities/new');
+}
+
+const removeItem = async (id: string) => {
+    try {
+        await deleteAlert(handlerMessage, activities);
+        if(handlerMessage.value == 'confirm') {
+            data = await activities.removeActivity(id);
+            await successAlert(data.message); 
+        }    
+    } catch (error) {
+        throw `Error during removing with ${error}`;
+    }
 }
 
 </script>

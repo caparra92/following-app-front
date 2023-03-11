@@ -25,10 +25,12 @@
     </template>
     
     <script setup lang="ts">
+    import router from '@/router';
     import { ref } from 'vue';
     import BaseInput from '../components/BaseInput.vue';
     import MenuBadge from "@/components/MenuBadge.vue";
     import { useActivityTypes } from '../stores/activityTypes';
+    import { errorAlert, successAlert } from '../helpers/alerts';
     import {
       IonPage,
       IonContent,
@@ -37,8 +39,7 @@
       IonButton,
       IonGrid,
       IonRow,
-      IonCol,
-      alertController
+      IonCol
     } from "@ionic/vue";
     
     const activityTypes = useActivityTypes();
@@ -49,21 +50,18 @@
       message: ''
     });
     
-    const successAlert = async (message: string) => {
-      const alert = await alertController.create({
-        header: "Success",
-        message: message,
-        buttons: ["Ok"],
-      });
-    
-      await alert.present();
-    };
-    
     const addCategory = async() => {
       try {
+
+        if(form.value.name === ''  || form.value.description === '') {
+          errorAlert(`name and description are required`);
+          return;
+        }
         const data = await activityTypes.addCategory(form.value.name, form.value.description);
         successAlert( `Category ${data.activityType.name} created`);
+        activityTypes.activityTypes.push(data.activityType);
         clearForm();
+        router.go(-1);
       } catch (error: any) {
         form.value.message = error;
         throw `Register failed with error ${error}`;

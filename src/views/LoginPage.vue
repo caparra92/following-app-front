@@ -18,8 +18,8 @@
         <form>
           <ion-list>
             <base-input type="email" label="Email" v-model="form.email" @input="validate"></base-input>
-              <span class="validation" v-if="!emailInvalid">Invalid email</span>
-              <base-input type="password" label="Password" v-model="form.password"></base-input>
+            <ion-item><span class="validation" v-if="!formInvalid">{{ form.message }}</span></ion-item>
+            <base-input type="password" label="Password" v-model="form.password"></base-input>
             <ion-row>
               <ion-col>
                 <ion-item>
@@ -34,7 +34,7 @@
   </ion-page>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import router from "../router";
 import BaseInput from '../components/BaseInput.vue';
 import {
@@ -46,71 +46,68 @@ import {
   IonButton,
   IonGrid,
   IonRow,
-  IonCol,
-  alertController,
+  IonCol
 } from "@ionic/vue";
-import { lockClosedOutline, personCircleOutline } from "ionicons/icons";
-import { useStore } from "../stores/store";
-import { ref } from "vue";
+import { useStore } from '../stores/store';
+import { errorAlert } from '../helpers/alerts';
+import { ref } from 'vue';
 
 const store = useStore();
-const emailInvalid = ref(true);
-
+const formInvalid = ref(true);
 const form = ref({
-  email: null,
-  password: null,
-  message: null,
+  email: '',
+  password: '',
+  message: '',
 });
 
 const changeView = () => {
   router.push("Register");
 };
 
-const validateEmail = (email) => {
+const validateEmail = (email: string) => {
   if (form.value.email) {
-    return form.value.email.match(
+    return email.match(
       /^(?=.{1,254}$)(?=.{1,64}@)[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/
     );
   }
 };
 
-const validate = (ev) => {
+const validate = (ev: any) => {
   const value = ev.target.value;
 
   if (value === "") return;
 
-  validateEmail(value)
-    ? (emailInvalid.value = true)
-    : (emailInvalid.value = false);
-};
-
-const presentAlert = async (message) => {
-  const alert = await alertController.create({
-    header: "Error",
-    message: message,
-    buttons: ["Try again"],
-  });
-
-  await alert.present();
+  if(validateEmail(value)) {
+    formInvalid.value = true;
+  } else {
+    formInvalid.value = false;
+    form.value.message = `Invalid email`
+  }
 };
 
 const login = async () => {
   try {
-    if (form.value.email === null || form.value.password === null) return;
-    if (!validateEmail(form.value.email)) return;
+    if (form.value.email === '' || form.value.password === '') {
+      await errorAlert(`Email and password are required`);
+      return;
+    }
+    if (!validateEmail(form.value.email)) {
+      await errorAlert(`Invalid email`);
+      return;
+    }
 
     const data = await store.login(form.value.email, form.value.password);
     if (data.user != null) {
       router.push('/dashboard');
     }
-    console.log(data.user != null) 
+
     const { response } = data;
     if (response) {
       const error = response.data.error;
-      presentAlert(error);
+      await errorAlert(error);
       clearForm();
     }
-  } catch (error) {
+  } catch (error: any) {
     form.value.message = error;
     throw `Login failed with error ${error}`;
   }
@@ -176,12 +173,12 @@ const clearForm = () => {
 
 .validation {
     display: inline-block;
-    margin: 0 1em;
+    margin: 0 1.2em;
     padding-top: 0;
     text-align: left;
-    width: 75%;
+    width: 100%;
     color: var(--ion-color-danger);
-    font-size: .6em;
+    font-size: .5em;
     border-top: 1px solid;
   }
 </style>

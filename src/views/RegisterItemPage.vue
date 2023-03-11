@@ -34,6 +34,7 @@
     import BaseTextArea from '@/components/BaseTextArea.vue';
     import { useActivities } from '@/stores/activities';
     import { useItems } from '@/stores/items';
+    import { errorAlert, successAlert } from "../helpers/alerts";
     import {
       IonPage,
       IonContent,
@@ -42,9 +43,8 @@
       IonButton,
       IonGrid,
       IonRow,
-      IonCol,
-      alertController
-    } from "@ionic/vue";
+      IonCol
+      } from "@ionic/vue";
 
     const categories = ref(<any>[]);
 
@@ -67,19 +67,15 @@
       activityId: '',
       message: ''
     });
-
-    const successAlert = async (message: string) => {
-      const alert = await alertController.create({
-        header: "Success",
-        message: message,
-        buttons: ["Ok"],
-      });
-    
-      await alert.present();
-    };
     
     const addItem = async() => {
       try {
+
+        if(form.value.name === ''  || form.value.description === '' || form.value.activityId === '') {
+          errorAlert(`name, description and activity are required`);
+          return;
+        }
+
         const data = await items.addItem(form.value.name, form.value.description, form.value.activityId);
         successAlert( `Item ${data.item.name} created`);
         items.items.push(data.item);

@@ -40,14 +40,12 @@ import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, alertControlle
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
-import { useActivities } from '../stores/activities';
 import { useItems } from "@/stores/items";
 import { onMounted, ref } from 'vue';
+import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
 const handlerMessage = ref('');
-
-const activities = useActivities();
 const items = useItems();
 let data: any;
 
@@ -64,7 +62,7 @@ const addItem = () => {
 
 const removeItem = async (id: string) => {
     try {
-        await deleteAlert();
+        await deleteAlert(handlerMessage, items);
         if(handlerMessage.value == 'confirm') {
             data = await items.removeItem(id);
             await successAlert(data.message); 
@@ -73,42 +71,6 @@ const removeItem = async (id: string) => {
         throw `Error during removing with ${error}`;
     }
 }
-
-const deleteAlert = async () => {
-        const alert = await alertController.create({
-          header: 'Do you want to delete?',
-          buttons: [
-            {
-              text: 'No',
-              role: 'cancel',
-              handler: () => {
-                handlerMessage.value = 'cancel';
-              },
-            },
-            {
-              text: 'Yes',
-              role: 'confirm',
-              handler: () => {
-                handlerMessage.value = 'confirm';
-              },
-            },
-          ],
-        });
-        await alert.present();  
-        const { role }: any = await alert.onDidDismiss();
-        handlerMessage.value = role;
-};
-
-const successAlert = async (message: string) => {
-      const alert = await alertController.create({
-        header: "Success",
-        message: message,
-        buttons: ["Ok"],
-      });
-    
-      await alert.present();
-    };
-
 </script>
 
 <style scoped>

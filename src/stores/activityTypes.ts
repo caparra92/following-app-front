@@ -13,18 +13,23 @@ const apiReq = axios.create({
 export const useActivityTypes = defineStore('activityTypes', {
     state: () => {
       return {
-        apiReq : apiReq
+        apiReq,
+        activityTypes: <any[]>[]
       }
     },
     getters: {
       loggedIn() {
         return token !== null
+      },
+      getActivityTypes(state): object[] {
+        return state.activityTypes;
       }
     },
     actions: {
         async getCategories() {
             try {
               const { data } = await this.apiReq.get(`/activityTypes`);
+              this.activityTypes = data;
               return data;
             } catch (error) {
               throw `The api call failed with ${error}`;
@@ -48,7 +53,17 @@ export const useActivityTypes = defineStore('activityTypes', {
           } catch (error) {
             return error;
           }
-        }  
+        },
+        async removeActivityType(id : string) {
+          try {
+            const { data } = await this.apiReq.delete(`/activityTypes/${id}`);
+            const index = this.activityTypes.findIndex(item => item.id == id);
+            this.activityTypes.splice(index,1);
+            return data;
+          } catch (error) {
+            return error;
+          }
+        } 
     }
   });
 

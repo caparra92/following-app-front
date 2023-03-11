@@ -26,6 +26,7 @@
     </template>
     
     <script setup lang="ts">
+    import router from '@/router';
     import { onMounted, ref } from 'vue';
     import BaseInput from '../components/BaseInput.vue';
     import MenuBadge from "@/components/MenuBadge.vue";
@@ -33,6 +34,7 @@
     import BaseTextArea from '@/components/BaseTextArea.vue';
     import { useActivities } from '@/stores/activities';
     import { useActivityTypes } from '@/stores/activityTypes';
+    import { errorAlert, successAlert } from '../helpers/alerts';
     import {
       IonPage,
       IonContent,
@@ -41,12 +43,10 @@
       IonButton,
       IonGrid,
       IonRow,
-      IonCol,
-      alertController
+      IonCol
     } from "@ionic/vue";
 
     const categories = ref(<any>[]);
-
 
     onMounted(async() => {
       const data = await activityTypes.getCategories();
@@ -66,22 +66,20 @@
       categoryId: '',
       message: ''
     });
-
-    const successAlert = async (message: string) => {
-      const alert = await alertController.create({
-        header: "Success",
-        message: message,
-        buttons: ["Ok"],
-      });
-    
-      await alert.present();
-    };
     
     const addActivity = async() => {
       try {
+        
+        if(form.value.name === ''  || form.value.description === '' || form.value.categoryId === '') {
+          errorAlert(`name, description and category are required`);
+          return;
+        }
+        
         const data = await activities.addActivity(form.value.name, form.value.description, form.value.categoryId);
         successAlert( `Activity ${data.activity.name} created`);
+        activities.activities.push(data.activity);
         clearForm();
+        router.go(-1);
       } catch (error: any) {
         form.value.message = error;
         throw `Register failed with error ${error}`;
