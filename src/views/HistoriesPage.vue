@@ -18,9 +18,11 @@
                </ion-row>
                <ion-row>
                    <ion-col>
-                       <div v-for="category in categories" :key="category.id">
-                           <category-badge :activityType="category.date" :id="category.id" @remove-item="removeItem"/>
-                       </div>
+                    <ion-accordion-group>
+                        <div v-for="category in categories" :key="category.id">
+                            <history-badge :date="category.date" :value="category.value" :id="category.id" @remove-item="removeItem"></history-badge>
+                        </div>
+                    </ion-accordion-group>
                    </ion-col>
                </ion-row>
                <ion-row>
@@ -36,8 +38,8 @@
    <script setup lang="ts">
    import router from "../router";
    import { useRoute } from 'vue-router';
-   import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
-   import CategoryBadge from '../components/CategoryBadge.vue';
+   import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup } from '@ionic/vue';
+   import HistoryBadge from '../components/HistoryBadge.vue';
    import AddButton from '../components/AddButton.vue';
    import MenuBadge from "@/components/MenuBadge.vue";
    import { useHistories } from "@/stores/histories";
@@ -54,8 +56,7 @@
        const id = <string>route.params.id;
        await histories.getHistoriesByItemId(id);
        categories.value = histories.getHistories;
-       console.log(categories.value)
-   });
+  });
    
    const addItem = () => {
        router.push('/histories/new');

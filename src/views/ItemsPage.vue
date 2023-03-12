@@ -57,7 +57,6 @@ onMounted(async()=> {
     await items.getItemsByActivityId(id);
     categories.value = items.getItems;
     histories.activityId = id;
-    console.log(histories.activityId);
 });
 
 const addItem = () => {
