@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseTextArea tests Should match with snapshot 1`] = `
+<ion-row class="">
+  <ion-col class="">
+    <ion-item class="container"><textarea placeholder="Category" cols="10" rows="5" class="field">
+          </textarea></ion-item>
+  </ion-col>
+</ion-row>
+`;

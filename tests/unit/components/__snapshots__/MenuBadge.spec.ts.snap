@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuBadge tests Should match with snapshot 1`] = `
+<ion-menu class="" size="large">
+  <ion-header class="">
+    <ion-toolbar class="">
+      <ion-title class="">
+        <ion-icon class="icon"></ion-icon>
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ul class="menu-list"><a href="/dashboard" class="">
+        <li>
+          <ion-icon></ion-icon>Categories
+        </li>
+      </a><a href="/register" class="">
+        <li>
+          <ion-icon></ion-icon>Register
+        </li>
+      </a>
+      <li>
+        <ion-icon></ion-icon>Logout
+      </li>
+    </ul>
+  </ion-content>
+</ion-menu>
+<div id="main-content" class="ion-page">
+  <ion-header class="">
+    <ion-toolbar class="">
+      <ion-buttons class="" slot="start">
+        <ion-menu-button class=""></ion-menu-button>
+      </ion-buttons>
+      <div class="back-button"><button>
+          <ion-icon></ion-icon>
+        </button></div>
+    </ion-toolbar>
+  </ion-header>
+</div>
+`;

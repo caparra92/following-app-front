@@ -17,6 +17,10 @@ describe('Base Input component', () => {
         expect(wrapper.html()).toMatchSnapshot();
     });
 
+    test('Should verify that component exists', () => {
+        expect(wrapper.exists()).toBeTruthy();
+    });
+
     test('Should define props in the component', () => {
         expect(wrapper.props().label).toBe('Email');
         expect(wrapper.props().modelValue).toBe('caparra@mail.com');

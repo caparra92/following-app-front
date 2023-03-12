@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseSelect tests Should match with snapshot 1`] = `
+<ion-row class="">
+  <ion-col class="">
+    <ion-item class="container"><select class="field field-select">
+        <option value="">Select an option...</option>
+        <option></option>
+        <option></option>
+        <option></option>
+      </select></ion-item>
+  </ion-col>
+</ion-row>
+`;

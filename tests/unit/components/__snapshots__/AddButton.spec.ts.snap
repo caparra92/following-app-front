@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AddButton tests Should match with snapshot 1`] = `
+<button class="add-button">
+  <ion-icon></ion-icon>
+</button>
+`;
