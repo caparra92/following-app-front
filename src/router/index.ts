@@ -9,6 +9,8 @@ import ItemsPage from '../views/ItemsPage.vue';
 import RegisterActivityTypePage from "../views/RegisterActivityTypePage.vue";
 import RegisterActivityPage from "../views/RegisterActivityPage.vue";
 import RegisterItemPage from "../views/RegisterItemPage.vue";
+import HistoriesPage from "../views/HistoriesPage.vue";
+import RegisterHistoryPage from "../views/RegisterHistoryPage.vue";
 
 const loggedIn = (to: any, from: any, next: any) => {
   const store = useStore();
@@ -87,7 +89,25 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       requiresAuth: true
     }
-  }
+  },
+  {
+    path: '/items/:id/histories',
+    name: 'histories',
+    component: HistoriesPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/histories/new',
+    name: 'addHistory',
+    component: RegisterHistoryPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
+  },
 ]
 
 const router = createRouter({

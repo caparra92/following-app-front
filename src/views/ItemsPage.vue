@@ -19,7 +19,7 @@
             <ion-row>
                 <ion-col>
                     <div v-for="category in categories" :key="category.id">
-                        <category-badge :activityType="category.name" view="items" :id="category.id" @remove-item="removeItem"/>
+                        <category-badge :activityType="category.name" view="histories" :id="category.id" @remove-item="removeItem"/>
                     </div>
                 </ion-col>
             </ion-row>

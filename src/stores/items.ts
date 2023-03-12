@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
-import { useActivities } from './activities';
 
 const token = localStorage.getItem('access_token') || null;
 
@@ -29,7 +28,7 @@ export const useItems = defineStore('items', {
     actions: {
         async getItemsByActivityId(id : string) {
           try {
-            const { data } = await this.apiReq.get(`activities/${id}/items`);
+            const { data } = await this.apiReq.get(`/activities/${id}/items`);
             this.items = data.items;
             return data;
           } catch (error) {

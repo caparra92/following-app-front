@@ -23,9 +23,11 @@ import { addOutline, chevronForwardOutline, trashBinOutline } from 'ionicons/ico
 import { defineProps, h, ref } from 'vue';
 import { useActivityTypes } from '../stores/activityTypes';
 import { useActivities } from '../stores/activities';
+import { useHistories } from '../stores/histories';
 
 const activityTypes = useActivityTypes();
 const activities = useActivities();
+const histories = useHistories();
 
 const props = defineProps({
   id: {
@@ -51,7 +53,15 @@ const viewItems = async() => {
       break;
     case 'items':
       data = await activities.getItemsById(props.id);
+      histories.activityId = props.id;
+      console.log("Activity id "+histories.activityId)
       router.push(`/activities/${props.id}/items`);
+      break;
+    case 'histories':
+      data = await histories.getHistoriesByItemId(props.id);
+      histories.itemId = props.id;
+      console.log("Item id "+histories.itemId)
+      router.push(`/items/${props.id}/histories`);
       break;
     default:
       break;
