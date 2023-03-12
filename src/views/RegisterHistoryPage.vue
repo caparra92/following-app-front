@@ -9,9 +9,8 @@
                 <form>
                 <ion-list>
                     <base-input type="date" label="date" v-model="form.date"></base-input>
-                    {{ form.itemId }}
                     <base-input type="number" label="value" v-model="form.value"></base-input>
-                    {{ form.activityId }}
+                    <base-select v-model="categories.items" @input = "selected"></base-select>
                 <ion-row>
                     <ion-col>
                     <ion-item>
@@ -27,9 +26,10 @@
 </template>
 <script setup lang="ts">
 import router from '@/router';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import BaseInput from '../components/BaseInput.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
+import BaseSelect from "@/components/BaseSelect.vue";
 import { useHistories } from '../stores/histories';
 import { errorAlert, successAlert } from '../helpers/alerts';
 import {
@@ -42,32 +42,45 @@ import {
     IonRow,
     IonCol
 } from "@ionic/vue";
+import { useItems } from '@/stores/items';
 
+const categories = ref(<any>[]);
 const histories = useHistories();
+const items = useItems();
+
+onMounted(async() => {
+    form.value.activityId = histories.activityId;
+    categories.value = await items.getItemsByActivityId(form.value.activityId);
+    console.log(categories.value)
+});
 
 const form = ref({
     date: '',
     value: 0,
-    itemId: histories.itemId,
-    activityId: histories.activityId,
+    itemId: '',
+    activityId: '',
     message: ''
 });
+
+const selected = (event: any) => {
+    form.value.itemId = event.target.value;
+}
 
 const addHistory = async() => {
     try {
 
-    if(form.value.date === ''  || form.value.value === null || form.value.itemId === '' || form.value.activityId === '') {
-        errorAlert(`Some value(s) missing`);
-        return;
-    }
-    const data = await histories.addHistory(form.value.date, form.value.value, form.value.itemId, form.value.activityId);
-    successAlert( `History value created`);
-    histories.histories.push(data.history);
-    clearForm();
-    router.go(-1);
+        if(form.value.date === ''  || form.value.value === null || form.value.itemId === '' || form.value.activityId === '') {
+            errorAlert(`Some value(s) missing`);
+            return;
+        }
+        const data = await histories.addHistory(form.value.date, form.value.value, form.value.itemId, form.value.activityId);
+        successAlert( `History value ${data.history.value} created`);
+        histories.histories.push(data.history);
+        clearForm();
+        router.go(-1);
     } catch (error: any) {
-    form.value.message = error;
-    throw `Register failed with error ${error}`;
+        form.value.message = error;
+        throw `Register failed with error ${error}`;
     }
     
 }
@@ -75,10 +88,17 @@ const addHistory = async() => {
 const clearForm = () => {
     form.value.date = '';
     form.value.value = 0;
-    form.value.itemId = '',
-    form.value.activityId = ''
+    form.value.itemId = '';
+    form.value.activityId = '';
 }
 </script>
 <style scoped>
-
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    text-align: center;
+}
 </style>

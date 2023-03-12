@@ -31,7 +31,7 @@ export const useHistories = defineStore('histories', {
         async getHistoriesByItemId(id : string) {
             try {
               const { data } = await this.apiReq.get(`/items/${id}/histories`);
-              this.histories = data;
+              this.histories = data.histories;
               return data;
             } catch (error) {
               throw `The api call failed with ${error}`;

@@ -19,7 +19,7 @@
                <ion-row>
                    <ion-col>
                        <div v-for="category in categories" :key="category.id">
-                           <category-badge :activityType="category.name" :id="category.id" @remove-item="removeItem"/>
+                           <category-badge :activityType="category.date" :id="category.id" @remove-item="removeItem"/>
                        </div>
                    </ion-col>
                </ion-row>
@@ -54,6 +54,7 @@
        const id = <string>route.params.id;
        await histories.getHistoriesByItemId(id);
        categories.value = histories.getHistories;
+       console.log(categories.value)
    });
    
    const addItem = () => {

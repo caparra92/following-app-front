@@ -41,12 +41,14 @@ import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
 import { useItems } from "@/stores/items";
+import { useHistories } from '../stores/histories';
 import { onMounted, ref } from 'vue';
 import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
 const handlerMessage = ref('');
 const items = useItems();
+const histories = useHistories();
 let data: any;
 
 onMounted(async()=> {
@@ -54,6 +56,8 @@ onMounted(async()=> {
     const id = <string>route.params.id;
     await items.getItemsByActivityId(id);
     categories.value = items.getItems;
+    histories.activityId = id;
+    console.log(histories.activityId);
 });
 
 const addItem = () => {

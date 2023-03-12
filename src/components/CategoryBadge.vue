@@ -53,14 +53,10 @@ const viewItems = async() => {
       break;
     case 'items':
       data = await activities.getItemsById(props.id);
-      histories.activityId = props.id;
-      console.log("Activity id "+histories.activityId)
       router.push(`/activities/${props.id}/items`);
       break;
     case 'histories':
       data = await histories.getHistoriesByItemId(props.id);
-      histories.itemId = props.id;
-      console.log("Item id "+histories.itemId)
       router.push(`/items/${props.id}/histories`);
       break;
     default:
