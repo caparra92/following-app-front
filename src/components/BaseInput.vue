@@ -7,13 +7,13 @@
           :placeholder="label"
           :value="modelValue"
           class="field"
-          @input="$emit('update:modelValue', $event.target.value)"
+          @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
         />
       </ion-item>
     </ion-col>
   </ion-row>
 </template>
-<script setup>
+<script setup lang="ts">
 import { IonRow, IonCol, IonItem, IonIcon } from '@ionic/vue';
 
 const props = defineProps({

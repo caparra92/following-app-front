@@ -5,7 +5,7 @@
             <ion-label>First Accordion</ion-label>
         </ion-item> -->
         <ion-item slot="header">
-            <p>{{date}}</p>
+            <p>{{ formatDate.day }}/{{ formatDate.month }}/{{ formatDate.year }}</p>
             <p>{{value}}</p>
         </ion-item>
         <div class="ion-padding action-group" slot="content">
@@ -17,9 +17,9 @@
     </ion-row>
 </template>
 <script setup lang="ts">
-import { IonRow, IonCol, IonIcon, IonAccordion, IonLabel, IonItem } from '@ionic/vue';
+import { IonRow, IonCol, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
 import { ellipsisVerticalOutline, trashBinOutline, createOutline, eyeOutline } from 'ionicons/icons';
-import { defineProps, h, ref } from 'vue';
+import { defineProps, computed} from 'vue';
 
 const props = defineProps({
   id: {
@@ -35,9 +35,16 @@ const props = defineProps({
   }
 });
 
-const actions = () => {
-    console.log('actions...');
-};
+const date = new Date(props.date);
+
+const formatDate = computed(() => {
+  return {
+    day: date.getDate() +1,
+    month: date.getMonth() +1,
+    year: date.getFullYear()
+  }
+});
+
 </script>
 <style scoped>
 ion-row {

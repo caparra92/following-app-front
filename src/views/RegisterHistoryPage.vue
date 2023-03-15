@@ -51,7 +51,6 @@ const items = useItems();
 onMounted(async() => {
     form.value.activityId = histories.activityId;
     categories.value = await items.getItemsByActivityId(form.value.activityId);
-    console.log(categories.value)
 });
 
 const form = ref({

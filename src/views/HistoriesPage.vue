@@ -20,7 +20,7 @@
                    <ion-col>
                     <ion-accordion-group>
                         <div v-for="category in categories" :key="category.id">
-                            <history-badge :date="category.date" :value="category.value" :id="category.id" @remove-item="removeItem"></history-badge>
+                            <history-badge :date="category.date" :value="category.value as number" :id="category.id" @remove-item="removeItem"></history-badge>
                         </div>
                     </ion-accordion-group>
                    </ion-col>
