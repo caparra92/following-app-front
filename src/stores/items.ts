@@ -35,6 +35,15 @@ export const useItems = defineStore('items', {
             throw `The api call failed with ${error}`;
           }
         },
+        async getItem(id: string) {
+          try {
+            const { data } = await this.apiReq.get(`/items/${id}`);
+            this.items = data.item;
+            return data;
+          } catch (error) {
+            throw `The api call failed with ${error}`;
+          }
+        },
         async addItem(name: string, description: string, activityId: string) {
           try {
             const { data } = await this.apiReq.post(`/items`, {

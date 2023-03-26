@@ -20,17 +20,14 @@ export const useHistories = defineStore('histories', {
       }
     },
     getters: {
-      loggedIn() {
-        return token !== null
-      },
-      getHistories(state): object[] {
-        return state.histories;
-      }
+      loggedIn: () => token !== null,
+      getHistories: (state) => state.histories.sort((a,b) => b.date - a.date),
+      getItemId: (state) => state.itemId
     },
     actions: {
-        async getHistoriesByItemId(id : string) {
+        async getHistoriesByItemId(id : string, offset: number) {
             try {
-              const { data } = await this.apiReq.get(`/items/${id}/histories`);
+              const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
               this.histories = data.histories;
               return data;
             } catch (error) {

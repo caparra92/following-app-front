@@ -1,5 +1,5 @@
 <template>
-  <ion-menu content-id="main-content" size="large">
+  <ion-menu content-id="main-content" size="large" class="menu-container">
     <ion-header>
       <ion-toolbar color="secondary">
         <ion-title><ion-icon :icon="statsChartOutline" class="icon"></ion-icon></ion-title>
@@ -52,6 +52,12 @@
 }
 </script>
 <style scoped>
+
+.menu-container {
+  position: fixed;
+  overflow: scroll;
+  z-index: 9999;
+}
 .menu-list {
   font-size: 30px;
   margin: 0;

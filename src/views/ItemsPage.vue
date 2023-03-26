@@ -18,9 +18,11 @@
             </ion-row>
             <ion-row>
                 <ion-col>
-                    <div v-for="category in categories" :key="category.id">
-                        <category-badge :activityType="category.name" view="histories" :id="category.id" @remove-item="removeItem"/>
-                    </div>
+                    <ion-accordion-group>
+                        <div v-for="category in categories" :key="category.id">
+                            <category-badge :activityType="category.name" view="histories" :id="category.id" @remove-item="removeItem" :accordion="true"/>
+                        </div>
+                    </ion-accordion-group>
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -36,7 +38,7 @@
 <script setup lang="ts">
 import router from "../router";
 import { useRoute } from 'vue-router';
-import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, alertController } from '@ionic/vue';
+import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup } from '@ionic/vue';
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";

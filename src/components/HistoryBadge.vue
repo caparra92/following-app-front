@@ -13,11 +13,11 @@
             <button class="action-icon" @click.prevent="$emit('updateItem', id)"><ion-icon size = "large" :icon="createOutline"></ion-icon></button>
             <button class="action-icon" @click.prevent="$emit('removeItem', id)"><ion-icon size = "large" :icon="trashBinOutline"></ion-icon></button>
         </div>
-    </ion-accordion>
+      </ion-accordion>
     </ion-row>
 </template>
 <script setup lang="ts">
-import { IonRow, IonCol, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
+import { IonRow, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
 import { ellipsisVerticalOutline, trashBinOutline, createOutline, eyeOutline } from 'ionicons/icons';
 import { defineProps, computed} from 'vue';
 
@@ -30,7 +30,7 @@ const props = defineProps({
     default: "Date"
   },
   value: {
-    type: Number,
+    type: [String, Number],
     default: 0
   }
 });

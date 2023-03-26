@@ -10,8 +10,7 @@
                 <ion-list>
                     <base-input type="date" label="date" v-model="form.date"></base-input>
                     <base-input type="number" label="value" v-model="form.value"></base-input>
-                    <base-select v-model="categories.items" @input = "selected"></base-select>
-                <ion-row>
+                    <ion-row>
                     <ion-col>
                     <ion-item>
                         <ion-button class="single-button" @click="addHistory">Enter</ion-button>
@@ -29,8 +28,9 @@ import router from '@/router';
 import { onMounted, ref } from 'vue';
 import BaseInput from '../components/BaseInput.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
-import BaseSelect from "@/components/BaseSelect.vue";
+import { useRoute } from 'vue-router';
 import { useHistories } from '../stores/histories';
+import { useItems } from '../stores/items';
 import { errorAlert, successAlert } from '../helpers/alerts';
 import {
     IonPage,
@@ -42,15 +42,18 @@ import {
     IonRow,
     IonCol
 } from "@ionic/vue";
-import { useItems } from '@/stores/items';
 
-const categories = ref(<any>[]);
 const histories = useHistories();
 const items = useItems();
 
 onMounted(async() => {
-    form.value.activityId = histories.activityId;
-    categories.value = await items.getItemsByActivityId(form.value.activityId);
+    const route = useRoute();
+    form.value.itemId = <string>route.params.id;
+    const item = await items.getItem(form.value.itemId);
+    const { activity_id } = item.item;
+    form.value.activityId = activity_id;
+    console.log(`Item_id: ${form.value.itemId}`)
+    console.log(`Activity_id: ${form.value.activityId}`)
 });
 
 const form = ref({
@@ -60,10 +63,6 @@ const form = ref({
     activityId: '',
     message: ''
 });
-
-const selected = (event: any) => {
-    form.value.itemId = event.target.value;
-}
 
 const addHistory = async() => {
     try {
@@ -77,6 +76,7 @@ const addHistory = async() => {
         histories.histories.push(data.history);
         clearForm();
         router.go(-1);
+        
     } catch (error: any) {
         form.value.message = error;
         throw `Register failed with error ${error}`;

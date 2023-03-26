@@ -1,16 +1,17 @@
 import { useStore } from "../stores/store";
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
-import RegisterUserPage from '../views/RegisterUserPage.vue'
-import LoginPage from '../views/LoginPage.vue';
-import DashboardPage from '../views/DashboardPage.vue';
-import ActivitiesPage from '../views/ActivitiesPage.vue';
-import ItemsPage from '../views/ItemsPage.vue';
-import RegisterActivityTypePage from "../views/RegisterActivityTypePage.vue";
-import RegisterActivityPage from "../views/RegisterActivityPage.vue";
-import RegisterItemPage from "../views/RegisterItemPage.vue";
-import HistoriesPage from "../views/HistoriesPage.vue";
-import RegisterHistoryPage from "../views/RegisterHistoryPage.vue";
+import RegisterUserPage from '@/views/RegisterUserPage.vue'
+import LoginPage from '@/views/LoginPage.vue';
+import DashboardPage from '@/views/DashboardPage.vue';
+import ActivitiesPage from '@/views/ActivitiesPage.vue';
+import ItemsPage from '@/views/ItemsPage.vue';
+import RegisterActivityTypePage from "@/views/RegisterActivityTypePage.vue";
+import RegisterActivityPage from "@/views/RegisterActivityPage.vue";
+import RegisterItemPage from "@/views/RegisterItemPage.vue";
+import HistoriesPage from "@/views/HistoriesPage.vue";
+import RegisterHistoryPage from "@/views/RegisterHistoryPage.vue";
+import StatsPage from '@/views/StatsPage.vue';
 
 const loggedIn = (to: any, from: any, next: any) => {
   const store = useStore();
@@ -100,7 +101,16 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/histories/new',
+    path: '/items/:id/stats',
+    name: 'statistics',
+    component: StatsPage,
+    beforeEnter: loggedIn,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: '/:id/histories/new',
     name: 'addHistory',
     component: RegisterHistoryPage,
     beforeEnter: loggedIn,

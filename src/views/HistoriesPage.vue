@@ -20,13 +20,16 @@
                    <ion-col>
                     <ion-accordion-group>
                         <div v-for="category in categories" :key="category.id">
-                            <history-badge :date="category.date" :value="category.value as number" :id="category.id" @remove-item="removeItem"></history-badge>
+                            <history-badge :date="category.date" :value="category.value" :id="category.id" @remove-item="removeItem"></history-badge>
                         </div>
                     </ion-accordion-group>
                    </ion-col>
+                   <ion-infinite-scroll @ionInfinite="ionInfinite">
+                       <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                   </ion-infinite-scroll>
                </ion-row>
                <ion-row>
-                   <ion-col class="add-button-col">
+                   <ion-col class="add-button-col add-button">
                        <add-button @click.prevent="addItem"></add-button>
                    </ion-col>
                </ion-row>
@@ -38,7 +41,7 @@
    <script setup lang="ts">
    import router from "../router";
    import { useRoute } from 'vue-router';
-   import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup } from '@ionic/vue';
+   import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/vue';
    import HistoryBadge from '../components/HistoryBadge.vue';
    import AddButton from '../components/AddButton.vue';
    import MenuBadge from "@/components/MenuBadge.vue";
@@ -49,17 +52,34 @@
    const categories = ref(<any>[]);
    const handlerMessage = ref('');
    const histories = useHistories();
+   let currentPage = 0;
    let data: any;
    
    onMounted(async()=> {
        const route = useRoute();
-       const id = <string>route.params.id;
-       await histories.getHistoriesByItemId(id);
+       histories.itemId = <string>route.params.id;
+       data = await histories.getHistoriesByItemId(histories.getItemId, currentPage);
        categories.value = histories.getHistories;
+       console.log(currentPage)
+       console.log(data.histories)
   });
+
+  const ionInfinite = async(ev: InfiniteScrollCustomEvent) => {
+       if(data.histories.length === 0 || data.histories.length < currentPage) {
+        ev.target.disabled = true;
+        return;
+       } else {
+           currentPage += 9;
+           data = await histories.getHistoriesByItemId(histories.getItemId, currentPage);
+           categories.value.push(...data.histories);
+           setTimeout(() => ev.target.complete(), 500);
+       }
+       console.log(currentPage)
+       console.log(data.histories.length)
+   };
    
    const addItem = () => {
-       router.push('/histories/new');
+       router.push(`/${histories.getItemId}/histories/new`);
    }
    
    const removeItem = async (id: string) => {
@@ -115,6 +135,12 @@
    
    ion-icon {
        margin-top: 30px;
+   }
+
+   .add-button {
+    position: fixed;
+    right: 1em;
+    bottom: 1em;
    }
    
    </style>
