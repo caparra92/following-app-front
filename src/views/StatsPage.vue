@@ -4,9 +4,10 @@
            <ion-grid class="container">
                <menu-badge></menu-badge>
                <ion-row>
-                    <ion-col><p class="title">Stats</p></ion-col>
+                    <ion-col><p class="title">{{ itemObj.name }}</p></ion-col>
                 </ion-row>
-                <bar-chart :chart-data="testData" :options="options"></bar-chart>
+                <bar-chart v-if="loaded" :chart-data="chartData" :options="options"></bar-chart>
+                {{ chartData.datasets.data }}
            </ion-grid>
        </ion-content>
     </ion-page>
@@ -19,69 +20,73 @@ import { BarChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 import MenuBadge from "@/components/MenuBadge.vue";
 import { useHistories } from '@/stores/histories';
+import { useItems } from '@/stores/items';
 
 const histories = useHistories();
+const items = useItems();
 const currentPage = 0;
-const categories = ref(<any>[]);
+let loaded = false;
+const categories = ref(<any[]>[]);
+const itemObj = ref(<any>{});
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 onMounted(async()=> {
        const route = useRoute();
        const id = <string>route.params.id;
+       const { item } = await items.getItem(id);
+       itemObj.value = item;
        await histories.getHistoriesByItemId(id, currentPage);
        categories.value = histories.getHistories;
-       console.log(categories.value)
-       console.log(getMonths(categories.value))
-       console.log(getDays(categories.value))
-       console.log(getValues(categories.value))
+       loaded = true;
+       chartData.value.labels = getDayValue(categories.value).dayValue;
+       chartData.value.datasets[0].data = getDayValue(categories.value).value;
   });
 
-const getMonths = (objData: any[]): string[] => {
-    return objData.map(data => months[new Date(data.date).getMonth()]);
+const getMonths = (objData: any[]) => {
+    return objData.map(data => months[new Date(data.date).getMonth()].substring(0,3));
 }
 
-const getDays = (objData: any[]): string[] => {
-    return objData.map(data => days[new Date(data.date).getDay()]);
+const getDayValue = (objData: any[]) => {
+    return {
+        dayWeek: objData.map(data => days[new Date(data.date).getDay()].substring(0,3)),
+        dayValue: objData.map(data => [new Date(data.date).getDate(), days[new Date(data.date).getDay()].substring(0,3)]),
+        value: objData.map(data => data.value)
+    };
 }
-
-const getValues = (objData: any[]): string[] => {
-    return objData.map(data => String(data.value));
-}
-
-const daysW = getDays(categories.value);
 
 Chart.register(...registerables);
 
-const testData = {
-      labels: ['Wednesday', 'Thursday', 'Wednesday', 'Friday', 'Thursday', 'Thursday', 'Thursday', 'Wednesday', 'Wednesday'],
+const chartData: any = ref({
+      labels: [['mon','03'],'mon\n 04','mon\n 05'],
       datasets: [
         {
-          data: ['30', '40', '38', '15', '45', '37', '30', '40', '41'],
+          data: [],
           backgroundColor: ['#FCDB00'],
           borderRadius: 50,
           borderSkipped: false
         },
       ],
-    };
+    });
 
 const options = ref({
     responsive: true,
     plugins: {
         legend: {
-            position: 'top'
+            display: false
         }
     },
     scales: {
         x: {
             grid: {
                 display: false
+            },
+            border: {
+                display: false
             }
         },
         y: {
-            grid: {
-                display: false
-            }
+            display: false
         }
     }
 });
