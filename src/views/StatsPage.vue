@@ -5,9 +5,13 @@
                <menu-badge></menu-badge>
                <ion-row>
                     <ion-col><p class="title">{{ itemObj.name }}</p></ion-col>
+               </ion-row>
+                <ion-row>
+                    <template  v-for="month in getMonths(categories)" :key="month">
+                        <button>{{ month }}</button>
+                    </template>
                 </ion-row>
                 <bar-chart v-if="loaded" :chart-data="chartData" :options="options"></bar-chart>
-                {{ chartData.datasets.data }}
            </ion-grid>
        </ion-content>
     </ion-page>
@@ -44,14 +48,15 @@ onMounted(async()=> {
   });
 
 const getMonths = (objData: any[]) => {
-    return objData.map(data => months[new Date(data.date).getMonth()].substring(0,3));
+    return objData.map(data => months[new Date(data.date).getUTCMonth()].substring(0,3));
 }
 
 const getDayValue = (objData: any[]) => {
+    const sortDays = objData.sort((a,b) => new Date(a.date).valueOf() - new Date(b.date).valueOf());
     return {
-        dayWeek: objData.map(data => days[new Date(data.date).getDay()].substring(0,3)),
-        dayValue: objData.map(data => [new Date(data.date).getDate(), days[new Date(data.date).getDay()].substring(0,3)]),
-        value: objData.map(data => data.value)
+        dayWeek: sortDays.map(data => days[new Date(data.date).getUTCDay()].substring(0,3)),
+        dayValue: sortDays.sort((a,b) => a - b).map(data => [new Date(data.date).getUTCDate(), days[new Date(data.date).getUTCDay()].substring(0,3)]),
+        value: sortDays.map(data => data.value)
     };
 }
 
@@ -100,5 +105,12 @@ const options = ref({
     width: 100%;
     height: 100vh;
     text-align: center;
+}
+
+button {
+    width: 4em;
+    height: 1.4em;
+    font-size: .4em;
+    border-radius: 5px;
 }
 </style>
