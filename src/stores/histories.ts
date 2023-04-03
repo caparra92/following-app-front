@@ -15,6 +15,7 @@ export const useHistories = defineStore('histories', {
       return {
         apiReq,
         histories: <any[]>[],
+        historiesById: <any[]>[],
         itemId: '',
         activityId: ''
       }
@@ -22,17 +23,33 @@ export const useHistories = defineStore('histories', {
     getters: {
       loggedIn: () => token !== null,
       getHistories: (state) => state.histories.sort((a,b) => b.date - a.date),
+      getHistoriesById: (state) => state.historiesById.sort((a,b) => b.date - a.date),
       getItemId: (state) => state.itemId
     },
     actions: {
-        async getHistoriesByItemId(id : string, offset: number) {
+        async getHistoriesByItemId(id : string, offset?: number) {
             try {
-              const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
-              this.histories = data.histories;
-              return data;
+              if(offset) {
+                const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
+                this.histories = data.histories;
+                return data;
+              } else {
+                const { data } = await this.apiReq.get(`/items/${id}/histories`);
+                this.historiesById = data.histories;
+                return data;
+              }
             } catch (error) {
               throw `The api call failed with ${error}`;
             }
+        },
+        async getHistoriesByMonth(id: string, month: number) {
+          try {
+            const { data } = await this.apiReq.get(`/items/${id}/histories/${month}`);
+            this.histories = data.histories;
+            return data;
+          } catch (error) {
+            throw `The api call failed with ${error}`;
+          }
         },
         async addHistory(date: string, value: number, itemId: string, activityId: string) {
           try {

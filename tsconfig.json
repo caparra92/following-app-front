@@ -33,7 +33,7 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx"
-  ],
+, "src/helpers/dataStructures.ts"  ],
   "exclude": [
     "node_modules"
   ]

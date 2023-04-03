@@ -7,9 +7,11 @@
                     <ion-col><p class="title">{{ itemObj.name }}</p></ion-col>
                </ion-row>
                 <ion-row>
-                    <template  v-for="month in getMonths(categories)" :key="month">
-                        <button>{{ month }}</button>
-                    </template>
+                    <swiper :modules="modules" class="btn-month-group" :scrollbar="false" :slides-per-view="4">
+                        <swiper-slide  v-for="(month, i) in uniqueMonthId" :key="i">
+                            <button @click="selectItem(i, month.idx)" :class="{ active: i === activeItem }">{{ month.month }}</button>
+                        </swiper-slide>
+                    </swiper>
                 </ion-row>
                 <bar-chart v-if="loaded" :chart-data="chartData" :options="options"></bar-chart>
            </ion-grid>
@@ -17,38 +19,63 @@
     </ion-page>
 </template>
 <script setup lang="ts">
+import 'swiper/css';
 import { onMounted, ref  } from 'vue';
 import { useRoute } from 'vue-router';
 import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Scrollbar } from 'swiper';
 import { BarChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 import MenuBadge from "@/components/MenuBadge.vue";
+import { months, days } from '../helpers/daysAndMonths';
+import { NewSet } from '../helpers/dataStructures';
 import { useHistories } from '@/stores/histories';
 import { useItems } from '@/stores/items';
 
+const route = useRoute();
+const id = <string>route.params.id;
 const histories = useHistories();
 const items = useItems();
-const currentPage = 0;
 let loaded = false;
+const activeItem = ref(null);
+const modules = [Scrollbar];
 const categories = ref(<any[]>[]);
+const availableMonths = ref(<any[]>[]);
 const itemObj = ref(<any>{});
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const currentMonth = new Date().getUTCMonth() + 1;
+const uniqueMonths = new NewSet();
+const uniqueIds = new NewSet();
+const uniqueMonthId: any[] = [];
+
 
 onMounted(async()=> {
-       const route = useRoute();
-       const id = <string>route.params.id;
-       const { item } = await items.getItem(id);
-       itemObj.value = item;
-       await histories.getHistoriesByItemId(id, currentPage);
-       categories.value = histories.getHistories;
-       loaded = true;
-       chartData.value.labels = getDayValue(categories.value).dayValue;
-       chartData.value.datasets[0].data = getDayValue(categories.value).value;
+    const { item } = await items.getItem(id);
+    itemObj.value = item;
+    await histories.getHistoriesByMonth(id, currentMonth);
+    await histories.getHistoriesByItemId(id);
+    categories.value = histories.getHistories;
+    availableMonths.value = histories.getHistoriesById;
+    loaded = true;
+    selectItem(0,currentMonth);
+    getMonths(availableMonths.value).month.forEach((month) => uniqueMonths.add(month));
+    getMonths(availableMonths.value).id.forEach((id) => uniqueIds.add(id));
+    const sortedIds = uniqueIds.values().sort((a: any,b: any)=> b - a );
+    for(let i = 0; i < sortedIds.length; i++) {
+        uniqueMonthId.push({
+            month: uniqueMonths.values()[i],
+            idx: sortedIds[i]
+        });
+    }
+    chartData.value.labels = getDayValue(categories.value).dayValue;
+    chartData.value.datasets[0].data = getDayValue(categories.value).value;
   });
 
 const getMonths = (objData: any[]) => {
-    return objData.map(data => months[new Date(data.date).getUTCMonth()].substring(0,3));
+    return {
+        month: objData.map(data => months[new Date(data.date).getUTCMonth()].name.substring(0,3)),
+        id: objData.map(data => months[new Date(data.date).getUTCMonth()].id)
+    }
 }
 
 const getDayValue = (objData: any[]) => {
@@ -60,10 +87,18 @@ const getDayValue = (objData: any[]) => {
     };
 }
 
+const selectItem = async(item: any, monthNumber: any) => {
+    activeItem.value = item;
+    await histories.getHistoriesByMonth(id, monthNumber);
+    categories.value = histories.getHistories;
+    chartData.value.labels = getDayValue(categories.value).dayValue;
+    chartData.value.datasets[0].data = getDayValue(categories.value).value;
+}
+
 Chart.register(...registerables);
 
 const chartData: any = ref({
-      labels: [['mon','03'],'mon\n 04','mon\n 05'],
+      labels: [],
       datasets: [
         {
           data: [],
@@ -108,9 +143,25 @@ const options = ref({
 }
 
 button {
-    width: 4em;
+    width: 5.2em;
     height: 1.4em;
     font-size: .4em;
     border-radius: 5px;
+    cursor: pointer;
+    margin: .2em .3em;
+    color: var(--ion-color-medium);
+}
+
+.btn-month-group {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 1em .5em 1em;
+}
+
+.active {
+    background-color: #FCDB00;
+    color: var(--ion-color-primary);
 }
 </style>

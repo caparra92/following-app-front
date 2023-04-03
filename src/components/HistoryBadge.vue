@@ -39,8 +39,8 @@ const date = new Date(props.date);
 
 const formatDate = computed(() => {
   return {
-    day: date.getDate() +1,
-    month: date.getMonth() +1,
+    day: date.getUTCDate(),
+    month: date.getUTCMonth() + 1,
     year: date.getFullYear()
   }
 });

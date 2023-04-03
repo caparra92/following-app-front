@@ -52,8 +52,6 @@ onMounted(async() => {
     const item = await items.getItem(form.value.itemId);
     const { activity_id } = item.item;
     form.value.activityId = activity_id;
-    console.log(`Item_id: ${form.value.itemId}`)
-    console.log(`Activity_id: ${form.value.activityId}`)
 });
 
 const form = ref({

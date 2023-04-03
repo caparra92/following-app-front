@@ -59,9 +59,7 @@
        const route = useRoute();
        histories.itemId = <string>route.params.id;
        data = await histories.getHistoriesByItemId(histories.getItemId, currentPage);
-       categories.value = histories.getHistories;
-       console.log(currentPage)
-       console.log(data.histories)
+       categories.value = histories.getHistoriesById;
   });
 
   const ionInfinite = async(ev: InfiniteScrollCustomEvent) => {
