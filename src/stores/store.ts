@@ -46,7 +46,7 @@ export const useStore = defineStore('store', {
           password
         });
         if(data.token) {
-          await this.logout();
+          //await this.logout();
           localStorage.setItem('access_token', data.token)
         } else {
           localStorage.setItem('access_token', data.token)

@@ -5,8 +5,12 @@
             <ion-label>First Accordion</ion-label>
         </ion-item> -->
         <ion-item slot="header">
-            <p>{{ formatDate.day }}/{{ formatDate.month }}/{{ formatDate.year }}</p>
-            <p>{{value}}</p>
+            <ion-col>
+              <div class="text-container">
+                <p>{{ formatDate.day }}/{{ formatDate.month }}/{{ formatDate.year }}</p>
+                <p>{{value}}</p>
+              </div>
+            </ion-col>
         </ion-item>
         <div class="ion-padding action-group" slot="content">
             <button class="action-icon" @click.prevent="$emit('viewItem', id)"><ion-icon size = "large" :icon="eyeOutline"></ion-icon></button>
@@ -17,7 +21,7 @@
     </ion-row>
 </template>
 <script setup lang="ts">
-import { IonRow, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
+import { IonRow, IonCol, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
 import { ellipsisVerticalOutline, trashBinOutline, createOutline, eyeOutline } from 'ionicons/icons';
 import { defineProps, computed} from 'vue';
 
@@ -62,12 +66,18 @@ div button {
   border-radius: 5px;
 }
 
+.text-container {
+  display: flex;
+  align-items: space-around;
+}
+
 p {
   font-family: 'Outfit', sans-serif;
   text-transform: capitalize;
   font-size: .6em;
   margin: 0 auto;
   line-height: 2.3;
+  display: inline-block;
 }
 
 ion-icon{

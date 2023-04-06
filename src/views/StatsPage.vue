@@ -8,8 +8,8 @@
                </ion-row>
                 <ion-row>
                     <swiper :modules="modules" class="btn-month-group" :scrollbar="false" :slides-per-view="4">
-                        <swiper-slide  v-for="(month, i) in uniqueMonthId" :key="i">
-                            <button @click="selectItem(i, month.idx)" :class="{ active: i === activeItem }">{{ month.month }}</button>
+                        <swiper-slide  v-for="({month, idx}, i) in uniqueMonthId" :key="i">
+                            <button @click="selectItem(i, idx)" :class="{ active: i === activeItem }">{{ month }}</button>
                         </swiper-slide>
                     </swiper>
                 </ion-row>
@@ -88,11 +88,15 @@ const getDayValue = (objData: any[]) => {
 }
 
 const selectItem = async(item: any, monthNumber: any) => {
-    activeItem.value = item;
-    await histories.getHistoriesByMonth(id, monthNumber);
-    categories.value = histories.getHistories;
-    chartData.value.labels = getDayValue(categories.value).dayValue;
-    chartData.value.datasets[0].data = getDayValue(categories.value).value;
+    if(activeItem.value !== item) {
+        activeItem.value = item;
+        await histories.getHistoriesByMonth(id, monthNumber);
+        categories.value = histories.getHistories;
+        chartData.value.labels = getDayValue(categories.value).dayValue;
+        chartData.value.datasets[0].data = getDayValue(categories.value).value;
+    } else {
+        return;
+    }
 }
 
 Chart.register(...registerables);

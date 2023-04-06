@@ -3,31 +3,20 @@
        <ion-content>
            <ion-grid class="container">
                <menu-badge></menu-badge>
-               <ion-row>
-                   <ion-col>
-                       <ion-avatar>
-                           <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                       </ion-avatar>
-                   </ion-col>
-               </ion-row>
-               <ion-row>
-                   <ion-col>
-                       <p>Camilo</p>
-                       <p>Parra</p>
-                   </ion-col>
-               </ion-row>
-               <ion-row>
-                   <ion-col>
-                    <ion-accordion-group>
-                        <div v-for="category in categories" :key="category.id">
-                            <history-badge :date="category.date" :value="category.value" :id="category.id" @remove-item="removeItem"></history-badge>
+               <avatar-badge></avatar-badge>
+                <div v-bind="containerProps">
+                    <ion-accordion-group v-bind="wrapperProps">
+                        <div
+                            v-for="{ index, data } in list"
+                            :key="index"
+                        >
+                        <history-badge :date="data.date" :value="data.value" :id="data.id" @remove-item="removeItem"></history-badge>
                         </div>
                     </ion-accordion-group>
-                   </ion-col>
-                   <ion-infinite-scroll @ionInfinite="ionInfinite">
-                       <ion-infinite-scroll-content></ion-infinite-scroll-content>
-                   </ion-infinite-scroll>
-               </ion-row>
+                </div>
+                <ion-infinite-scroll @ionInfinite="ionInfinite">
+                    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+                </ion-infinite-scroll>
                <ion-row>
                    <ion-col class="add-button-col add-button">
                        <add-button @click.prevent="addItem"></add-button>
@@ -41,15 +30,20 @@
    <script setup lang="ts">
    import router from "../router";
    import { useRoute } from 'vue-router';
-   import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/vue';
+   import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/vue';
+   import { useVirtualList } from '@vueuse/core';
    import HistoryBadge from '../components/HistoryBadge.vue';
    import AddButton from '../components/AddButton.vue';
    import MenuBadge from "@/components/MenuBadge.vue";
+   import AvatarBadge from '@/components/AvatarBadge.vue';
    import { useHistories } from "@/stores/histories";
    import { onMounted, ref } from 'vue';
    import { deleteAlert, successAlert } from "../helpers/alerts";
    
    const categories = ref(<any>[]);
+   const { list, containerProps, wrapperProps } = useVirtualList(categories, {
+    itemHeight: 96
+   });
    const handlerMessage = ref('');
    const histories = useHistories();
    let currentPage = 0;
@@ -102,30 +96,7 @@
        width: 100%;
        height: 100vh;
        text-align: center;
-     }
-   
-   ion-avatar {
-       align-self: center;
-       margin: 0 auto;
-   }
-   
-   ion-col p {
-       font-size: 30px;
-       margin: 0;
-   }
-   
-   ion-col p:first-child {
-       color: var(--ion-color-primary);
-       font-weight: 600;
-       margin-top: 30px;
-   }
-   
-   ion-col p:last-child {
-       color: var(--ion-color-medium);
-       font-weight: 400;
-       line-height: 1;
-       margin-bottom: 30px;
-   }
+    }
    
    ion-col button {
        background: none;
@@ -139,6 +110,15 @@
     position: fixed;
     right: 1em;
     bottom: 1em;
+   }
+
+   .accordion-container {
+    height: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
    }
    
    </style>

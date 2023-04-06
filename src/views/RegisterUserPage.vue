@@ -52,8 +52,7 @@ import {
   IonButton,
   IonGrid,
   IonRow,
-  IonCol,
-  alertController
+  IonCol
 } from "@ionic/vue";
 
 const store = useStore();
