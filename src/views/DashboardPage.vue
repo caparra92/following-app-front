@@ -3,23 +3,15 @@
     <ion-content>
         <ion-grid class="container">
             <menu-badge></menu-badge>
+            <avatar-badge></avatar-badge>
             <ion-row>
                 <ion-col>
-                    <ion-avatar>
-                        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                    </ion-avatar>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <p>Camilo</p>
-                    <p>Parra</p>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <div v-for="category in categories" :key="category.id">
-                        <category-badge :activityType="category.name" view="activities" :id="category.id" @remove-item="removeItem"/>
+                    <div v-bind="containerProps">
+                        <div v-bind="wrapperProps">
+                            <div v-for="{index, data} in list" :key="index">
+                                <category-badge :activityType="data.name" view="activities" :id="data.id" @remove-item="removeItem"/>
+                            </div>
+                        </div>
                     </div>
                 </ion-col>
             </ion-row>
@@ -34,7 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { IonAvatar, IonPage, IonContent, IonIcon, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
+import { useVirtualList } from '@vueuse/core';
+import AvatarBadge  from '@/components/AvatarBadge.vue';
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from '../components/MenuBadge.vue';
@@ -44,6 +38,9 @@ import { onMounted, ref } from 'vue';
 import router from '@/router';
 
 const categories = ref(<any>[]);
+const { list, containerProps, wrapperProps } = useVirtualList(categories, {
+itemHeight: 96
+});
 const activityTypes = useActivityTypes();
 const handlerMessage = ref('');
 let data: any;

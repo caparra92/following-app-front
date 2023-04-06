@@ -1,6 +1,6 @@
 <template>
   <ion-row v-if="accordion">
-    <ion-accordion :toggle-icon="ellipsisVerticalOutline">
+    <ion-accordion :toggle-icon="ellipsisVerticalOutline" ref="ionAcc">
         <!-- <ion-item slot="header" color="light">
             <ion-label>First Accordion</ion-label>
         </ion-item> -->
@@ -9,7 +9,7 @@
         </ion-item>
         <div class="ion-padding action-group" slot="content">
             <button class="action-icon" @click="viewItems"><ion-icon size = "large" :icon="eyeOutline"></ion-icon></button>
-            <button class="action-icon" @click="viewStats"><ion-icon size = "large" :icon="statsChartOutline"></ion-icon></button>
+            <button class="action-icon" @click="viewStats()"><ion-icon size = "large" :icon="statsChartOutline"></ion-icon></button>
             <button class="action-icon" @click.prevent="$emit('removeItem', id)"><ion-icon size = "large" :icon="trashBinOutline"></ion-icon></button>
         </div>
     </ion-accordion>
@@ -33,17 +33,20 @@
 
 <script setup lang="ts">
 import router from "../router";
-import { IonGrid, IonRow, IonCol, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
-import { addOutline, chevronForwardOutline, trashBinOutline,  ellipsisVerticalOutline, statsChartOutline, eyeOutline} from 'ionicons/icons';
-import { defineProps, h, ref } from 'vue';
+import { IonRow, IonCol, IonIcon, IonAccordion, IonItem } from '@ionic/vue';
+import { chevronForwardOutline, trashBinOutline,  ellipsisVerticalOutline, statsChartOutline, eyeOutline} from 'ionicons/icons';
+import { defineProps, ref, onMounted } from 'vue';
 import { useActivityTypes } from '../stores/activityTypes';
 import { useActivities } from '../stores/activities';
-import { useHistories } from '../stores/histories';
 
 const activityTypes = useActivityTypes();
 const activities = useActivities();
-const histories = useHistories();
+const ionAcc = ref(null);
 let data;
+
+// onMounted(() => {
+  
+// });
 
 const props = defineProps({
   id: {
@@ -63,7 +66,6 @@ const props = defineProps({
     default: false
   }
 });
-
 
 const viewStats = () => {
   router.push(`/items/${props.id}/stats`);

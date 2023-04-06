@@ -22,6 +22,8 @@ import { IonRow, IonCol, IonAvatar } from '@ionic/vue'
 .avatar-container {
     display: flex;
     flex-direction: column;
+    padding-top: 20px;
+    margin-top: 30px;
 }
 ion-avatar {
     align-self: center;
@@ -31,7 +33,7 @@ ion-avatar {
 ion-col p:first-child {
     color: var(--ion-color-primary);
     font-weight: 600;
-    margin-top: 20px;
+    /* margin-top: 20px; */
 }
 
 ion-col p {

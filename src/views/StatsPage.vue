@@ -9,7 +9,7 @@
                 <ion-row>
                     <swiper :modules="modules" class="btn-month-group" :scrollbar="false" :slides-per-view="4">
                         <swiper-slide  v-for="({month, idx}, i) in uniqueMonthId" :key="i">
-                            <button @click="selectItem(i, idx)" :class="{ active: i === activeItem }">{{ month }}</button>
+                            <button @click="selectItem(i, idx)" :class="{ active: i === activeIndex }">{{ month }}</button>
                         </swiper-slide>
                     </swiper>
                 </ion-row>
@@ -33,12 +33,17 @@ import { NewSet } from '../helpers/dataStructures';
 import { useHistories } from '@/stores/histories';
 import { useItems } from '@/stores/items';
 
+interface UniqueMonthId {
+    month: string,
+    idx: number
+}
+
 const route = useRoute();
 const id = <string>route.params.id;
 const histories = useHistories();
 const items = useItems();
 let loaded = false;
-const activeItem = ref(null);
+const activeIndex = ref(0);
 const modules = [Scrollbar];
 const categories = ref(<any[]>[]);
 const availableMonths = ref(<any[]>[]);
@@ -46,8 +51,7 @@ const itemObj = ref(<any>{});
 const currentMonth = new Date().getUTCMonth() + 1;
 const uniqueMonths = new NewSet();
 const uniqueIds = new NewSet();
-const uniqueMonthId: any[] = [];
-
+const uniqueMonthId =  <UniqueMonthId[]>[];
 
 onMounted(async()=> {
     const { item } = await items.getItem(id);
@@ -57,16 +61,17 @@ onMounted(async()=> {
     categories.value = histories.getHistories;
     availableMonths.value = histories.getHistoriesById;
     loaded = true;
-    selectItem(0,currentMonth);
     getMonths(availableMonths.value).month.forEach((month) => uniqueMonths.add(month));
     getMonths(availableMonths.value).id.forEach((id) => uniqueIds.add(id));
-    const sortedIds = uniqueIds.values().sort((a: any,b: any)=> b - a );
+    const sortedIds = <number[]>uniqueIds.values().sort((a: any,b: any)=> b - a );
     for(let i = 0; i < sortedIds.length; i++) {
         uniqueMonthId.push({
-            month: uniqueMonths.values()[i],
+            month: <string>uniqueMonths.values()[i],
             idx: sortedIds[i]
         });
     }
+    activeIndex.value = uniqueMonthId.findIndex((month) => month.idx === currentMonth);
+    selectItem(activeIndex.value,currentMonth);
     chartData.value.labels = getDayValue(categories.value).dayValue;
     chartData.value.datasets[0].data = getDayValue(categories.value).value;
   });
@@ -88,8 +93,8 @@ const getDayValue = (objData: any[]) => {
 }
 
 const selectItem = async(item: any, monthNumber: any) => {
-    if(activeItem.value !== item) {
-        activeItem.value = item;
+    if(activeIndex.value !== item) {
+        activeIndex.value = item;
         await histories.getHistoriesByMonth(id, monthNumber);
         categories.value = histories.getHistories;
         chartData.value.labels = getDayValue(categories.value).dayValue;

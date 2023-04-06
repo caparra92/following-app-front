@@ -3,26 +3,16 @@
     <ion-content>
         <ion-grid class="container">
             <menu-badge></menu-badge>
+            <avatar-badge></avatar-badge>
             <ion-row>
                 <ion-col>
-                    <ion-avatar>
-                        <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-                    </ion-avatar>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <p>Camilo</p>
-                    <p>Parra</p>
-                </ion-col>
-            </ion-row>
-            <ion-row>
-                <ion-col>
-                    <ion-accordion-group>
-                        <div v-for="category in categories" :key="category.id">
-                            <category-badge :activityType="category.name" view="histories" :id="category.id" @remove-item="removeItem" :accordion="true"/>
-                        </div>
-                    </ion-accordion-group>
+                    <div v-bind="containerProps">
+                        <ion-accordion-group v-bind="wrapperProps">
+                            <div v-for="{index, data} in list" :key="index">
+                                <category-badge :activityType="data.name" view="histories" :id="data.id" @remove-item="removeItem" :accordion="true"/>
+                            </div>
+                        </ion-accordion-group>
+                    </div>
                 </ion-col>
             </ion-row>
             <ion-row>
@@ -38,7 +28,9 @@
 <script setup lang="ts">
 import router from "../router";
 import { useRoute } from 'vue-router';
-import { IonAvatar, IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup } from '@ionic/vue';
+import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup } from '@ionic/vue';
+import {  useVirtualList  } from '@vueuse/core';
+import AvatarBadge from "@/components/AvatarBadge.vue";
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
@@ -48,6 +40,9 @@ import { onMounted, ref } from 'vue';
 import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
+const { list, containerProps, wrapperProps } = useVirtualList(categories, {
+itemHeight: 96
+});
 const handlerMessage = ref('');
 const items = useItems();
 const histories = useHistories();
