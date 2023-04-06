@@ -10,10 +10,11 @@ import { addOutline } from 'ionicons/icons';
 </script>
 <style scoped>
 .add-button {
+    position: fixed;
+    bottom: 1.2em;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 30px;
     width: 2em;
     height: 2em;
     color: var(--ion-color-light);

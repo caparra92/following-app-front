@@ -1,5 +1,5 @@
 <template>
-  <ion-menu content-id="main-content" size="large" class="menu-container">
+  <ion-menu content-id="main-content" size="large" class="menu-container" ref="menu">
     <ion-header>
       <ion-toolbar color="secondary">
         <ion-title><ion-icon :icon="statsChartOutline" class="icon"></ion-icon></ion-title>
@@ -43,11 +43,14 @@
     IonIcon
   } from '@ionic/vue';
   import { listOutline, personAddOutline, powerOutline, statsChartOutline } from 'ionicons/icons';
+  import { ref } from "vue";
   
   const store = useStore();
+  const menu = ref(null);
   
   const logout = async() => {
-    const data = await store.logout();
+    await store.logout();
+    // menu.value.close();
     router.push('/login');
 }
 </script>

@@ -48,6 +48,7 @@ let data: any;
 onMounted(async()=> {
  await activityTypes.getCategories();
  categories.value = activityTypes.getActivityTypes;
+ console.log(categories.value)
 });
 
 const addCategory = () => {

@@ -16,7 +16,6 @@ button {
   align-items: center;
   background: transparent;
   width: 44px;
-  height: 44px;
   border-radius: 5px;
 }
 

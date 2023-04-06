@@ -97,6 +97,7 @@ const login = async () => {
     }
 
     const data = await store.login(form.value.email, form.value.password);
+    console.log(data)
     if (data.user != null) {
       router.push('/dashboard');
     }

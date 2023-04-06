@@ -71,7 +71,8 @@ onMounted(async()=> {
         });
     }
     activeIndex.value = uniqueMonthId.findIndex((month) => month.idx === currentMonth);
-    selectItem(activeIndex.value,currentMonth);
+    activeIndex.value === -1 ? selectItem(0,uniqueMonthId[0].idx) : selectItem(activeIndex.value,currentMonth);
+    console.log(activeIndex.value, currentMonth)
     chartData.value.labels = getDayValue(categories.value).dayValue;
     chartData.value.datasets[0].data = getDayValue(categories.value).value;
   });

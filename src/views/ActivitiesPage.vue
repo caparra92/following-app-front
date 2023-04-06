@@ -83,27 +83,9 @@ const removeItem = async (id: string) => {
     text-align: center;
   }
 
-ion-avatar {
-    align-self: center;
-    margin: 0 auto;
-}
-
 ion-col p {
     font-size: 30px;
     margin: 0;
-}
-
-ion-col p:first-child {
-    color: var(--ion-color-primary);
-    font-weight: 600;
-    margin-top: 30px;
-}
-
-ion-col p:last-child {
-    color: var(--ion-color-medium);
-    font-weight: 400;
-    line-height: 1;
-    margin-bottom: 30px;
 }
 
 ion-col button {

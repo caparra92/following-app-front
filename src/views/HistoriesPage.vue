@@ -42,7 +42,7 @@
    
    const categories = ref(<any>[]);
    const { list, containerProps, wrapperProps } = useVirtualList(categories, {
-    itemHeight: 96
+    itemHeight: 99
    });
    const handlerMessage = ref('');
    const histories = useHistories();
