@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { uri } from '../../config/config';
 
 const token = localStorage.getItem('access_token') || null;
 
 const apiReq = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: uri,
   headers: {
     'Authorization': token
   }
@@ -31,11 +32,17 @@ export const useHistories = defineStore('histories', {
             try {
               if(offset) {
                 const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
-                this.histories = data.histories;
+                if(data.histories.length){
+                  this.histories = this.historiesById;
+                  console.log(this.histories)
+                } else {
+                  this.histories = data.histories;
+                }
                 return data;
               } else {
                 const { data } = await this.apiReq.get(`/items/${id}/histories`);
                 this.historiesById = data.histories;
+                console.log(this.historiesById)
                 return data;
               }
             } catch (error) {
@@ -69,6 +76,7 @@ export const useHistories = defineStore('histories', {
             const { data } = await this.apiReq.delete(`/histories/${id}`);
             const index = this.histories.findIndex(item => item.id == id);
             this.histories.splice(index,1);
+            this.historiesById.splice(index,1);
             return data;
           } catch (error) {
             return error;

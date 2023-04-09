@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
+import { uri } from '../../config/config';
 
 const token = localStorage.getItem('access_token') || null;
+console.log(uri);
 
 const apiReq = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: uri,
   headers: {
     'Authorization': token
   }

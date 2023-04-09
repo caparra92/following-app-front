@@ -71,7 +71,7 @@ const addHistory = async() => {
         }
         const data = await histories.addHistory(form.value.date, form.value.value, form.value.itemId, form.value.activityId);
         successAlert( `History value ${data.history.value} created`);
-        histories.histories.push(data.history);
+        histories.historiesById.push(data.history);
         clearForm();
         router.go(-1);
         
