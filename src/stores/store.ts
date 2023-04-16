@@ -47,7 +47,8 @@ export const useStore = defineStore('store', {
           email,
           password
         });
-        localStorage.setItem('access_token', data.token)
+        localStorage.setItem('access_token', data.token);
+        console.log(`is logged: ${this.loggedIn}`)
         return data;
       } catch (error) {
           return error;

@@ -17,6 +17,7 @@ button {
   background: transparent;
   width: 44px;
   border-radius: 5px;
+  margin: auto;
 }
 
 ion-icon{
