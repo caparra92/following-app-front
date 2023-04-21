@@ -15,23 +15,25 @@ const getActivityTypes = () => {
         itemHeight: 96
     });
 
-    activityTypes.getCategories();
-    categories.value = activityTypes.getActivityTypes;
-    console.log(categories.value);
-
-    
+    const initActivityTypes = async () => {
+        await activityTypes.getCategories();
+        categories.value = activityTypes.getActivityTypes;
+        console.log(categories.value);
+    }
 
     const removeItem = async (id: string) => {
         try {
             await deleteAlert(handlerMessage, activityTypes);
-            if(handlerMessage.value == 'confirm') {
+            if (handlerMessage.value == 'confirm') {
                 data = await activityTypes.removeActivityType(id);
-                await successAlert(data.message); 
-            }    
+                await successAlert(data.message);
+            }
         } catch (error) {
             throw `Error during removing with ${error}`;
         }
     }
+
+    initActivityTypes();
 
     return {
         categories,
