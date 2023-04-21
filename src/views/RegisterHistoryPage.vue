@@ -1,7 +1,7 @@
 <template>
     <ion-page>
         <ion-content>
-            <ion-grid class="container">
+            <ion-grid class="container" v-if="loaded">
             <menu-badge></menu-badge>
                 <ion-row>
                 <ion-col><p class="title">New History</p></ion-col>
@@ -20,6 +20,7 @@
                 </ion-list>
                 </form>
             </ion-grid>
+            <loader-spinner v-else></loader-spinner>
         </ion-content>
     </ion-page>
 </template>
@@ -28,6 +29,7 @@ import router from '@/router';
 import { onMounted, ref } from 'vue';
 import BaseInput from '../components/BaseInput.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
+import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import { useRoute } from 'vue-router';
 import { useHistories } from '../stores/histories';
 import { useItems } from '../stores/items';
@@ -45,11 +47,13 @@ import {
 
 const histories = useHistories();
 const items = useItems();
+const loaded = ref(false);
 
 onMounted(async() => {
     const route = useRoute();
     form.value.itemId = <string>route.params.id;
     const item = await items.getItem(form.value.itemId);
+    loaded.value = true;
     const { activity_id } = item.item;
     form.value.activityId = activity_id;
 });

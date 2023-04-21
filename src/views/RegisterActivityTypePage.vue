@@ -43,7 +43,6 @@
     } from "@ionic/vue";
     
     const activityTypes = useActivityTypes();
-    
     const form = ref({
       name: '',
       description: '',

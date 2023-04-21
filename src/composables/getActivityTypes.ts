@@ -9,6 +9,7 @@ const getActivityTypes = () => {
     const categories = ref(<any>[]);
     const activityTypes = useActivityTypes();
     const handlerMessage = ref('');
+    const loaded = ref(false);
     let data: any;
 
     const { list, containerProps, wrapperProps } = useVirtualList(categories, {
@@ -18,6 +19,7 @@ const getActivityTypes = () => {
     const initActivityTypes = async () => {
         await activityTypes.getCategories();
         categories.value = activityTypes.getActivityTypes;
+        loaded.value = true;
         console.log(categories.value);
     }
 
@@ -40,6 +42,7 @@ const getActivityTypes = () => {
         activityTypes,
         data,
         handlerMessage,
+        loaded,
         list,
         containerProps,
         wrapperProps,

@@ -1,7 +1,7 @@
 <template>
  <ion-page>
     <ion-content>
-        <ion-grid class="container">
+        <ion-grid class="container" v-if="loaded">
             <menu-badge></menu-badge>
             <avatar-badge></avatar-badge>
             <ion-row>
@@ -21,6 +21,7 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
+        <loader-spinner v-else></loader-spinner>
     </ion-content>
  </ion-page>
 </template>
@@ -34,12 +35,14 @@ import AvatarBadge from "@/components/AvatarBadge.vue";
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from "@/components/MenuBadge.vue";
+import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import { useItems } from "@/stores/items";
 import { useHistories } from '../stores/histories';
 import { onMounted, ref } from 'vue';
 import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
+const loaded = ref(false);
 const { list, containerProps, wrapperProps } = useVirtualList(categories, {
 itemHeight: 96
 });
@@ -53,6 +56,7 @@ onMounted(async()=> {
     const id = <string>route.params.id;
     await items.getItemsByActivityId(id);
     categories.value = items.getItems;
+    loaded.value = true;
     histories.activityId = id;
 });
 

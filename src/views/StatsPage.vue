@@ -1,7 +1,7 @@
 <template>
     <ion-page>
        <ion-content>
-           <ion-grid class="container">
+           <ion-grid class="container" v-if="loaded">
                <menu-badge></menu-badge>
                <ion-row>
                     <ion-col><p class="title">{{ itemObj.name }}</p></ion-col>
@@ -13,8 +13,9 @@
                         </swiper-slide>
                     </swiper>
                 </ion-row>
-                <bar-chart v-if="loaded" :chart-data="chartData" :options="options"></bar-chart>
+                <bar-chart :chart-data="chartData" :options="options"></bar-chart>
            </ion-grid>
+           <loader-spinner v-else></loader-spinner>
        </ion-content>
     </ion-page>
 </template>
@@ -23,6 +24,7 @@ import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { BarChart } from 'vue-chart-3';
 import MenuBadge from "@/components/MenuBadge.vue";
+import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import getHistories from '@/composables/getHistories';
 
 const { modules, itemObj, uniqueMonthId, selectItem, activeIndex, loaded, chartData, options } = getHistories();

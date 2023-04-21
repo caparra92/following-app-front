@@ -1,7 +1,7 @@
 <template>
     <ion-page>
           <ion-content>
-              <ion-grid class="container">
+              <ion-grid class="container" v-if="loaded">
                 <menu-badge></menu-badge>
                   <ion-row>
                     <ion-col><p class="title">New Item</p></ion-col>
@@ -21,6 +21,7 @@
                     </ion-list>
                   </form>
               </ion-grid>
+              <loader-spinner v-else></loader-spinner>
           </ion-content>
         </ion-page>
     </template>
@@ -30,6 +31,7 @@
     import { onMounted, ref } from 'vue';
     import BaseInput from '../components/BaseInput.vue';
     import MenuBadge from "@/components/MenuBadge.vue";
+    import LoaderSpinner from '@/components/LoaderSpinner.vue';
     import BaseSelect from '@/components/BaseSelect.vue';
     import BaseTextArea from '@/components/BaseTextArea.vue';
     import { useActivities } from '@/stores/activities';
@@ -47,10 +49,12 @@
       } from "@ionic/vue";
 
     const categories = ref(<any>[]);
+    const loaded = ref(false);
 
 
     onMounted(async() => {
       categories.value = await activities.getActivities();
+      loaded.value = true;
       console.log(categories.value[0].name)
     });
     

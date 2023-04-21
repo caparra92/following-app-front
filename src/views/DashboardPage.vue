@@ -1,7 +1,7 @@
 <template>
  <ion-page>
     <ion-content>
-        <ion-grid class="container">
+        <ion-grid class="container" v-if="loaded">
             <menu-badge></menu-badge>
             <avatar-badge></avatar-badge>
             <ion-row>
@@ -21,6 +21,7 @@
                 </ion-col>
             </ion-row>
         </ion-grid>
+        <loader-spinner v-else></loader-spinner>
     </ion-content>
  </ion-page>
 </template>
@@ -31,6 +32,7 @@ import AvatarBadge  from '@/components/AvatarBadge.vue';
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from '../components/MenuBadge.vue';
+import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import router from '@/router';
 import getActivityTypes from '@/composables/getActivityTypes';
 
@@ -38,7 +40,7 @@ const addCategory = () => {
     router.push('/activityTypes/new');
 }
 
-const { list, containerProps, wrapperProps, removeItem } = getActivityTypes();
+const { list, loaded, containerProps, wrapperProps, removeItem } = getActivityTypes();
 
 </script>
 

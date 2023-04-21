@@ -1,7 +1,7 @@
 <template>
     <ion-page>
        <ion-content>
-           <ion-grid class="container">
+           <ion-grid class="container" v-if="loaded">
                <menu-badge></menu-badge>
                <avatar-badge></avatar-badge>
                 <div v-bind="containerProps">
@@ -23,6 +23,7 @@
                    </ion-col>
                </ion-row>
            </ion-grid>
+           <loader-spinner v-else></loader-spinner>
        </ion-content>
     </ion-page>
    </template>
@@ -35,12 +36,14 @@
    import HistoryBadge from '../components/HistoryBadge.vue';
    import AddButton from '../components/AddButton.vue';
    import MenuBadge from "@/components/MenuBadge.vue";
+   import LoaderSpinner from '@/components/LoaderSpinner.vue';
    import AvatarBadge from '@/components/AvatarBadge.vue';
    import { useHistories } from "@/stores/histories";
    import { onMounted, ref } from 'vue';
    import { deleteAlert, successAlert } from "../helpers/alerts";
    
    const categories = ref(<any>[]);
+   const loaded = ref(false);
    const { list, containerProps, wrapperProps } = useVirtualList(categories, {
     itemHeight: 99
    });
@@ -54,6 +57,7 @@
        histories.itemId = <string>route.params.id;
        data = await histories.getHistoriesByItemId(histories.getItemId, currentPage);
        categories.value = histories.getHistoriesById;
+       loaded.value = true;
   });
 
   const ionInfinite = async(ev: InfiniteScrollCustomEvent) => {

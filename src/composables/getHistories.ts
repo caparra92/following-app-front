@@ -50,7 +50,7 @@ const getHistories = () => {
         chartData.value.datasets[0].data = getDayValue(categories.value).value;
     }
 
-    getItems();
+   getItems();
 
     const getMonths = (objData: any[]) => {
         return {
