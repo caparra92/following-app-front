@@ -27,45 +27,18 @@
 
 <script setup lang="ts">
 import { IonPage, IonContent, IonGrid, IonRow, IonCol } from '@ionic/vue';
-import { useVirtualList } from '@vueuse/core';
 import AvatarBadge  from '@/components/AvatarBadge.vue';
 import CategoryBadge from '../components/CategoryBadge.vue';
 import AddButton from '../components/AddButton.vue';
 import MenuBadge from '../components/MenuBadge.vue';
-import { useActivityTypes } from '../stores/activityTypes';
-import { deleteAlert, successAlert } from '../helpers/alerts';
-import { onMounted, ref } from 'vue';
 import router from '@/router';
-
-const categories = ref(<any>[]);
-const { list, containerProps, wrapperProps } = useVirtualList(categories, {
-itemHeight: 96
-});
-const activityTypes = useActivityTypes();
-const handlerMessage = ref('');
-let data: any;
-
-onMounted(async()=> {
- await activityTypes.getCategories();
- categories.value = activityTypes.getActivityTypes;
- console.log(categories.value)
-});
+import getActivityTypes from '@/composables/getActivityTypes';
 
 const addCategory = () => {
     router.push('/activityTypes/new');
 }
 
-const removeItem = async (id: string) => {
-    try {
-        await deleteAlert(handlerMessage, activityTypes);
-        if(handlerMessage.value == 'confirm') {
-            data = await activityTypes.removeActivityType(id);
-            await successAlert(data.message); 
-        }    
-    } catch (error) {
-        throw `Error during removing with ${error}`;
-    }
-}
+const { list, containerProps, wrapperProps, removeItem } = getActivityTypes();
 
 </script>
 
