@@ -14,10 +14,6 @@ import { IonApp, IonRouterOutlet } from '@ionic/vue';
   font-size: 30px;
 }
 
-.container {
-  background-color: var(--ion-color-primary-contrast);
-}
-
 .title {
     color: var(--ion-color-primary);
     font-weight: 400;

@@ -1,15 +1,7 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import { uri } from '../../config/config';
+import { apiReq } from '../../config/config';
 
-const token = localStorage.getItem('access_token') || null;
-
-const apiReq = axios.create({
-  baseURL: uri,
-  headers: {
-    'Authorization': token
-  }
-});
+let token = localStorage.getItem('access_token') || null;
 
 export const useHistories = defineStore('histories', {
     state: () => {
@@ -28,13 +20,16 @@ export const useHistories = defineStore('histories', {
       getItemId: (state) => state.itemId
     },
     actions: {
+      setToken(payload: string | null) {
+        token = payload
+      },
         async getHistoriesByItemId(id : string, offset?: number) {
             try {
               if(offset) {
                 const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
                 if(data.histories.length){
                   this.histories = this.historiesById;
-                  console.log(this.histories)
+                  this.setToken(localStorage.getItem('access_token'));
                 } else {
                   this.histories = data.histories;
                 }
@@ -42,7 +37,7 @@ export const useHistories = defineStore('histories', {
               } else {
                 const { data } = await this.apiReq.get(`/items/${id}/histories`);
                 this.historiesById = data.histories;
-                console.log(this.historiesById)
+                // console.log(this.historiesById)
                 return data;
               }
             } catch (error) {

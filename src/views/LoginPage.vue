@@ -97,9 +97,9 @@ const login = async () => {
     }
 
     const data = await store.login(form.value.email, form.value.password);
-    console.log(data)
+    store.setToken(data.token)
     if (data.user != null) {
-      router.push('/dashboard');
+      router.push({name: 'dashboard'});
     }
 
     const { response } = data;
@@ -108,6 +108,7 @@ const login = async () => {
       await errorAlert(error);
       clearForm();
     }
+    return true;
   } catch (error: any) {
     form.value.message = error;
     throw `Login failed with error ${error}`;

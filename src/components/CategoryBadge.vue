@@ -115,6 +115,7 @@ ion-col p {
   font-size: .6em;
   margin: 0 auto;
   line-height: 2.3;
+  color: var(--ion-color-dark);
 }
 
 ion-icon{

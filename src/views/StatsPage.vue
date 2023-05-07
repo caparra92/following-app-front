@@ -57,10 +57,11 @@ button {
     justify-content: center;
     align-items: center;
     margin: 0 1em .5em 1em;
+    color: var(--ion-color-primary-contrast);
 }
 
 .active {
     background-color: #FCDB00;
-    color: var(--ion-color-primary);
+    color: var(--ion-color-primary-contrast);
 }
 </style>

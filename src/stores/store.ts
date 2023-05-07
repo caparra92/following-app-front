@@ -1,22 +1,12 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import { uri } from '../../config/config';
+import { apiReq } from '../../config/config';
 
-const token = localStorage.getItem('access_token') || null;
-console.log(uri);
-
-const apiReq = axios.create({
-  baseURL: uri,
-  headers: {
-    'Authorization': token
-  }
-});
-
+let token = localStorage.getItem('access_token') || null;
 export const useStore = defineStore('store', {
   state: () => {
     return {
-      toggle: false,
-      apiReq : apiReq
+      apiReq : apiReq,
+      token: token
     }
   },
   getters: {
@@ -25,6 +15,9 @@ export const useStore = defineStore('store', {
     }
   },
   actions: {
+    setToken(payload: string | null) {
+      token = payload
+    },
     async getActivities() {
       try {
         const { data } = await this.apiReq.get('/activities');
@@ -48,7 +41,10 @@ export const useStore = defineStore('store', {
           password
         });
         localStorage.setItem('access_token', data.token);
+        this.setToken(localStorage.getItem('access_token'));
         console.log(`is logged: ${this.loggedIn}`)
+        console.log(`Token: ${token}`)
+        console.log(`This Token: ${this.token}`)
         return data;
       } catch (error) {
           return error;

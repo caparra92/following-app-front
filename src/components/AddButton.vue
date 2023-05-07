@@ -17,7 +17,7 @@ import { addOutline } from 'ionicons/icons';
     align-items: center;
     width: 2em;
     height: 2em;
-    color: var(--ion-color-light);
+    color: var(--ion-color-primary-contrast);
     background: var(--ion-color-primary);
     border-radius: 50%;
     transition: all 0.40s ease-in-out;

@@ -1,21 +1,14 @@
 import { defineStore } from 'pinia';
-import axios from 'axios';
-import { uri } from '../../config/config';
+import { apiReq } from '../../config/config';
 
-const token = localStorage.getItem('access_token') || null;
-
-const apiReq = axios.create({
-  baseURL: uri,
-  headers: {
-    'Authorization': token
-  }
-});
+let token = localStorage.getItem('access_token') || null;
 
 export const useActivityTypes = defineStore('activityTypes', {
     state: () => {
       return {
         apiReq,
-        activityTypes: <any[]>[]
+        activityTypes: <any[]>[],
+        token: localStorage.getItem('access_token')
       }
     },
     getters: {
@@ -27,10 +20,14 @@ export const useActivityTypes = defineStore('activityTypes', {
       }
     },
     actions: {
+      setToken(payload: string | null) {
+        token = payload
+      },
         async getCategories() {
             try {
               const { data } = await this.apiReq.get(`/activityTypes`);
               this.activityTypes = data;
+              this.setToken(localStorage.getItem('access_token'));
               return data;
             } catch (error) {
               throw `The api call failed with ${error}`;

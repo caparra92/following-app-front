@@ -55,14 +55,12 @@
 }
 </script>
 <style scoped>
-
 .menu-container {
   position: fixed;
   overflow: scroll;
   z-index: 9999;
 }
 .menu-list {
-  font-size: 30px;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -81,15 +79,15 @@
   padding: 8px;
   line-height: 1.2;
   cursor: pointer;
+  font-size: .8em;
 }
 
 .menu-list a {
   text-decoration: none;
-  font-size: .8em;
 }
 
-li ion-icon {
-  padding-top: 8px;
+.menu-list li ion-icon {
+  font-size: 1em;
 }
 
 .icon {
