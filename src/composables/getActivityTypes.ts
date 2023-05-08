@@ -20,7 +20,6 @@ const getActivityTypes = () => {
         await activityTypes.getCategories();
         categories.value = activityTypes.getActivityTypes;
         loaded.value = true;
-        console.log(categories.value);
     }
 
     const removeItem = async (id: string) => {

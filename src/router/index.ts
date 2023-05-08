@@ -16,7 +16,6 @@ import StatsPage from '@/views/StatsPage.vue';
 const loggedIn = (to: any, from: any, next: any) => {
   const store = useStore();
   if(store.loggedIn) {
-    console.log("Logged in router: "+store.loggedIn)
     next()
     return
   }
