@@ -7,9 +7,15 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ul class="menu-list">
-        <router-link to="/dashboard"><li><ion-icon :icon="listOutline" size="large"></ion-icon>Categories</li></router-link>
-        <router-link to="/register"><li><ion-icon :icon="personAddOutline" size="large"></ion-icon>Register</li></router-link>
-        <li @click="logout"><ion-icon :icon="powerOutline" size="large"></ion-icon>Logout</li>
+        <ion-menu-toggle :auto-hide="true">
+          <router-link to="/dashboard"><li><ion-icon :icon="listOutline" size="large"></ion-icon>Categories</li></router-link>
+        </ion-menu-toggle>
+        <ion-menu-toggle :auto-hide="true">
+          <router-link to="/register"><li><ion-icon :icon="personAddOutline" size="large"></ion-icon>Register</li></router-link>
+        </ion-menu-toggle>
+        <ion-menu-toggle :auto-hide="true">
+          <li @click="logout"><ion-icon :icon="powerOutline" size="large"></ion-icon>Logout</li>
+        </ion-menu-toggle>
       </ul>
     </ion-content>
   </ion-menu>
@@ -36,6 +42,7 @@
     IonHeader,
     IonMenu,
     IonMenuButton,
+    IonMenuToggle,
     IonButtons,
     IonTitle,
     IonToolbar,
@@ -96,6 +103,7 @@
 
 .back-button {
   position: absolute;
+  margin: auto;
   right: 10px;
   top: 5px;
 }

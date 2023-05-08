@@ -3,25 +3,17 @@
       <ion-content>
           <ion-grid class="container">
             <menu-badge></menu-badge>
-              <ion-row>
-                <ion-col>
-                  <!-- <div class="multi-button" v-if="!isLogged">
-                    <button class="multi-button_button toggle" @click="changeView">Login</button>
-                    <button class="multi-button_button toggle" disabled>Register</button>
-                  </div> -->
-                </ion-col>
-              </ion-row>
-              <ion-row>
+              <!-- <ion-row>
                 <ion-col><p class="title">Register</p></ion-col>
-              </ion-row>
+              </ion-row> -->
               <form>
                 <ion-list>
                   <base-input type="text" label="Name" v-model="form.name" ref="name"></base-input>
                   <base-input type="email" label="Email" v-model="form.email" @input="validate"></base-input>
-                  <ion-item><span class="validation" v-if="!emailInvalid">Invalid email</span></ion-item>
+                  <template><span class="validation" v-if="!emailInvalid">Invalid email</span></template>
                   <base-input type="password" label="Password" v-model="form.password"></base-input>
                   <base-input type="password" label="Password confirmation" v-model="form.passwordConfirmation"></base-input>
-                  <ion-item><span class="validation" v-if="!passwordInvalid">Passwords did not match</span></ion-item>
+                  <template><span class="validation" v-if="!passwordInvalid">Passwords did not match</span></template>
                 <ion-row>
                   <ion-col>
                     <ion-item>
@@ -145,6 +137,10 @@ const clearForm = () => {
     text-align: center;
   }
 
+  .title {
+    margin: 0;
+  }
+
   .multi-button {
     display: flex;
     flex-direction: row;
@@ -189,5 +185,9 @@ const clearForm = () => {
     font-family: 'Outfit', sans-serif;
     border-top: 1px solid;
     font-size: .5em;
+  }
+
+  ion-col {
+    padding: 0;
   }
 </style>
