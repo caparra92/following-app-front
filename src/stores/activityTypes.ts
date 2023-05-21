@@ -2,13 +2,16 @@ import { defineStore } from 'pinia';
 import { apiReq } from '../../config/config';
 
 let token = localStorage.getItem('access_token') || null;
+let user = localStorage.getItem('user') || null;
+//console.log(user)
 
 export const useActivityTypes = defineStore('activityTypes', {
     state: () => {
       return {
         apiReq,
         activityTypes: <any[]>[],
-        token: localStorage.getItem('access_token')
+        token: localStorage.getItem('access_token'),
+        user: localStorage.getItem('user')
       }
     },
     getters: {
@@ -23,15 +26,20 @@ export const useActivityTypes = defineStore('activityTypes', {
       setToken(payload: string | null) {
         token = payload
       },
+      setUser(payload: string | null) {
+        user = payload
+      },
         async getCategories() {
-            try {
-              const { data } = await this.apiReq.get(`/activityTypes`);
-              this.activityTypes = data;
-              this.setToken(localStorage.getItem('access_token'));
-              return data;
-            } catch (error) {
-              throw `The api call failed with ${error}`;
-            }
+          //this.activityTypes = [];
+          try {
+            const { data } = await this.apiReq.get(`/activityTypes/user/${user}`);
+            console.log(data)
+            this.activityTypes = data;
+            this.setToken(localStorage.getItem('access_token'));
+            return data;
+          } catch (error) {
+            throw `The api call failed with ${error}`;
+          }
         },
         async getActivitiesById(id: string) {
             try {
@@ -45,7 +53,8 @@ export const useActivityTypes = defineStore('activityTypes', {
           try {
             const { data } = await this.apiReq.post(`/activityTypes`, {
               name,
-              description
+              description,
+              user
             });
             return data;
           } catch (error) {

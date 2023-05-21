@@ -10,7 +10,7 @@
                             v-for="{ index, data } in list"
                             :key="index"
                         >
-                        <history-badge :date="data.date" :value="data.value" :id="data.id" @remove-item="removeItem"></history-badge>
+                        <history-badge :date="data.date" :value="data.value" :id="data.id" @view-item="openModal($event, 'view')" @update-item="openModal($event, 'update')" @remove-item="removeItem"></history-badge>
                         </div>
                     </ion-accordion-group>
                 </div>
@@ -24,6 +24,34 @@
                </ion-row>
            </ion-grid>
            <loader-spinner v-else></loader-spinner>
+           <base-modal 
+                v-if="isOpen"
+                @on:close="closeModal"
+            >
+                <template v-slot:header>
+                    <p class="title">{{mode}} history</p></template>
+                <template v-slot:body>
+                    <ion-grid v-if="loaded">
+                        <form>
+                            <ion-list v-if="mode==='update'">
+                                <base-input type="text" label="date" v-model="singleHistory.date"></base-input>
+                                <base-input type="number" label="value" v-model="singleHistory.value"></base-input>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-button class="single-button-update">Update</ion-button>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-list>
+                            <ion-list v-if="mode==='view'">
+                                <base-input type="text" label="date" v-model="singleHistory.date" readonly disabled></base-input>
+                                <base-input type="number" label="value" v-model="singleHistory.value" readonly disabled></base-input>
+                            </ion-list>
+                        </form>
+                    </ion-grid>
+                </template>
+           </base-modal>
        </ion-content>
     </ion-page>
    </template>
@@ -31,13 +59,15 @@
    <script setup lang="ts">
    import router from "../router";
    import { useRoute } from 'vue-router';
-   import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonAccordionGroup, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/vue';
+   import { IonPage, IonContent, IonGrid, IonRow, IonCol, IonList, IonItem, IonButton, IonAccordionGroup, IonInfiniteScroll, IonInfiniteScrollContent, InfiniteScrollCustomEvent } from '@ionic/vue';
    import { useVirtualList } from '@vueuse/core';
    import HistoryBadge from '../components/HistoryBadge.vue';
    import AddButton from '../components/AddButton.vue';
    import MenuBadge from "@/components/MenuBadge.vue";
    import LoaderSpinner from '@/components/LoaderSpinner.vue';
    import AvatarBadge from '@/components/AvatarBadge.vue';
+   import BaseInput from "@/components/BaseInput.vue";
+   import BaseModal from "@/components/BaseModal.vue";
    import { useHistories } from "@/stores/histories";
    import { onMounted, ref } from 'vue';
    import { deleteAlert, successAlert } from "../helpers/alerts";
@@ -49,6 +79,12 @@
    });
    const handlerMessage = ref('');
    const histories = useHistories();
+   const singleHistory = ref({
+    date: '',
+    value: ''
+   });
+   const isOpen = ref(false);
+   const mode = ref('');
    let currentPage = 0;
    let data: any;
    
@@ -70,13 +106,27 @@
            categories.value.push(...data.histories);
            setTimeout(() => ev.target.complete(), 500);
        }
-       console.log(currentPage)
-       console.log(data.histories.length)
    };
    
    const addItem = () => {
        router.push(`/${histories.getItemId}/histories/new`);
    }
+
+    const openModal = async (id: string, m: string) => {
+        m === 'update' ? mode.value = 'update' : mode.value = 'view';
+        isOpen.value = true;
+        try {
+            const { history } = await histories.getHistory(id);
+            singleHistory.value.date = history.date;
+            singleHistory.value.value = history.value;
+        } catch (error) {
+            throw `Error during viewing with ${error}`;
+        }
+    }
+
+    const closeModal = () => {
+        isOpen.value = false;
+    }
    
    const removeItem = async (id: string) => {
        try {
@@ -123,6 +173,15 @@
     flex-direction: row;
     align-items: center;
     border-bottom: 1px solid #ccc;
+   }
+
+   .title {
+    text-align: center;
+    font-size: .6em;
+   }
+
+   .single-button-update {
+    --background: var(--ion-color-warning);
    }
    
    </style>

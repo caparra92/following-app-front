@@ -55,7 +55,7 @@
     onMounted(async() => {
       categories.value = await activities.getActivities();
       loaded.value = true;
-      console.log(categories.value[0].name)
+      // console.log(categories.value[0].name)
     });
     
     const activities = useActivities();

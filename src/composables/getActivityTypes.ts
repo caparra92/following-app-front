@@ -17,6 +17,7 @@ const getActivityTypes = () => {
     });
 
     const initActivityTypes = async () => {
+        //categories.value = [];
         await activityTypes.getCategories();
         categories.value = activityTypes.getActivityTypes;
         loaded.value = true;

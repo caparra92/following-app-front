@@ -2,11 +2,14 @@ import { defineStore } from 'pinia';
 import { apiReq } from '../../config/config';
 
 let token = localStorage.getItem('access_token') || null;
+let user = localStorage.getItem('user') || null;
+
 export const useStore = defineStore('store', {
   state: () => {
     return {
       apiReq : apiReq,
-      token: token
+      token: token,
+      user: user
     }
   },
   getters: {
@@ -17,6 +20,9 @@ export const useStore = defineStore('store', {
   actions: {
     setToken(payload: string | null) {
       token = payload
+    },
+    setUser(payload: string | null) {
+      user = payload
     },
     async getActivities() {
       try {
@@ -41,10 +47,9 @@ export const useStore = defineStore('store', {
           password
         });
         localStorage.setItem('access_token', data.token);
+        localStorage.setItem('user',data.user.id);
         this.setToken(localStorage.getItem('access_token'));
-        console.log(`is logged: ${this.loggedIn}`)
-        console.log(`Token: ${token}`)
-        console.log(`This Token: ${this.token}`)
+        this.setUser(localStorage.getItem('user'));
         return data;
       } catch (error) {
           return error;
@@ -54,6 +59,7 @@ export const useStore = defineStore('store', {
       try {
         const { data } = await this.apiReq.get('/login');
         localStorage.removeItem('access_token');
+        localStorage.removeItem('user');
         return data;
       } catch (error) {
         throw `Logout error with ${error}`;

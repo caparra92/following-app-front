@@ -42,6 +42,14 @@ ion-button {
     border-radius: 7px;
   }
 
+  .single-button-update {
+    width: 100%;
+    height: 3em;
+    margin: 1em;
+    font-size: .7em;
+    border-radius: 7px;
+  }
+
   .field {
     width: 100%;
     font-size: .6em;

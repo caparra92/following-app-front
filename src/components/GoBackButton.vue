@@ -17,11 +17,11 @@ button {
   background: transparent;
   width: 44px;
   border-radius: 5px;
-  margin: auto;
 }
 
 ion-icon{
   color: var(--ion-color-dark);
+  margin-top: 2px;
 }
 
 </style>
