@@ -42,7 +42,6 @@ import {
   IonContent,
   IonList,
   IonItem,
-  IonIcon,
   IonButton,
   IonGrid,
   IonRow,

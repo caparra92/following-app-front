@@ -22,6 +22,7 @@
     "@types/vue-virtual-scroller": "npm:@earltp/vue-virtual-scroller@^1.0.1",
     "@vueuse/core": "^9.13.0",
     "axios": "^1.3.3",
+    "buffer": "^6.0.3",
     "chart.js": "^4.2.1",
     "core-js": "^3.6.5",
     "ionicons": "^6.0.3",

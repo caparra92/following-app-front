@@ -9,14 +9,14 @@
             :cols="col"
             :rows="row"
             class="field"
-            @input="$emit('update:modelValue', $event.target.value)"
+            @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
           >
           </textarea>
         </ion-item>
       </ion-col>
     </ion-row>
   </template>
-  <script setup>
+  <script setup lang="ts">
   import { IonRow, IonCol, IonItem } from '@ionic/vue';
   
   const props = defineProps({

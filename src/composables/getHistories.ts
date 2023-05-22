@@ -25,6 +25,7 @@ const getHistories = () => {
     const uniqueMonths = new NewSet();
     const uniqueIds = new NewSet();
     const uniqueMonthId = <UniqueMonthId[]>[];
+    const message = ref('');
 
     const getItems = async () => {
         const { item } = await items.getItem(id);
@@ -33,19 +34,29 @@ const getHistories = () => {
         await histories.getHistoriesByItemId(id);
         categories.value = histories.getHistories;
         availableMonths.value = histories.getHistoriesById;
+        if(availableMonths.value.length === 0) {
+            message.value = 'No histories!!!'
+        }
         loaded.value = true;
         getMonths(availableMonths.value).month.forEach((month) => uniqueMonths.add(month));
         getMonths(availableMonths.value).id.forEach((id) => uniqueIds.add(id));
         const sortedIds = <number[]>uniqueIds.values().sort((a: any, b: any) => b - a);
-        for (let i = 0; i < sortedIds.length; i++) {
+        if(sortedIds.length > 0) {
+            for (let i = 0; i < sortedIds.length; i++) {
+                uniqueMonthId.push({
+                    month: <string>uniqueMonths.values()[i],
+                    idx: sortedIds[i]
+                });
+            }
+        } else {
+            const currentMonthName = months.find((m) => m.id === currentMonth);
             uniqueMonthId.push({
-                month: <string>uniqueMonths.values()[i],
-                idx: sortedIds[i]
+                month: <string>currentMonthName?.name,
+                idx: sortedIds[currentMonth]
             });
         }
         activeIndex.value = uniqueMonthId.findIndex((month) => month.idx === currentMonth);
         activeIndex.value === -1 ? selectItem(0, uniqueMonthId[0].idx) : selectItem(activeIndex.value, currentMonth);
-        // console.log(activeIndex.value, currentMonth)
         chartData.value.labels = getDayValue(categories.value).dayValue;
         chartData.value.datasets[0].data = getDayValue(categories.value).value;
     }
@@ -122,6 +133,7 @@ const getHistories = () => {
     return {
         itemObj,
         modules,
+        message,
         options,
         chartData,
         uniqueMonthId,

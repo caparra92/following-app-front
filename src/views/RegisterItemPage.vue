@@ -9,8 +9,7 @@
                   <form>
                     <ion-list>
                       <base-input type="text" label="Name" v-model="form.name"></base-input>
-                      <base-text-area placeholder="Description" v-model="form.description" col="5" row="15"></base-text-area>
-                      <base-select v-model="categories" @input = "selected" :selectedValue="categories[0]"></base-select>
+                      <base-text-area label="Description" v-model="form.description" col="5" row="15"></base-text-area>
                     <ion-row>
                       <ion-col>
                         <ion-item>
@@ -28,6 +27,7 @@
     
     <script setup lang="ts">
     import router from '@/router';
+    import { useRoute } from 'vue-router';
     import { onMounted, ref } from 'vue';
     import BaseInput from '../components/BaseInput.vue';
     import MenuBadge from "@/components/MenuBadge.vue";
@@ -48,34 +48,28 @@
       IonCol
       } from "@ionic/vue";
 
-    const categories = ref(<any>[]);
     const loaded = ref(false);
+    const route = useRoute();
+    const activityId = <string>route.params.id;
 
 
     onMounted(async() => {
-      categories.value = await activities.getActivities();
       loaded.value = true;
-      // console.log(categories.value[0].name)
     });
     
-    const activities = useActivities();
     const items = useItems();
-
-    const selected = (event: any) => {
-      form.value.activityId = event.target.value;
-    }
   
     const form = ref({
       name: '',
       description: '',
-      activityId: '',
+      activityId,
       message: ''
     });
     
     const addItem = async() => {
       try {
 
-        if(form.value.name === ''  || form.value.description === '' || form.value.activityId === '') {
+        if(form.value.name === ''  || form.value.description === '') {
           errorAlert(`name, description and activity are required`);
           return;
         }

@@ -1,6 +1,7 @@
 import { useStore } from "../stores/store";
 import { createRouter, createWebHistory } from '@ionic/vue-router';
 import { RouteRecordRaw } from 'vue-router';
+import { parseJWT } from "@/helpers/parseJWT";
 import RegisterUserPage from '@/views/RegisterUserPage.vue'
 import LoginPage from '@/views/LoginPage.vue';
 import DashboardPage from '@/views/DashboardPage.vue';
@@ -13,14 +14,7 @@ import HistoriesPage from "@/views/HistoriesPage.vue";
 import RegisterHistoryPage from "@/views/RegisterHistoryPage.vue";
 import StatsPage from '@/views/StatsPage.vue';
 
-const loggedIn = (to: any, from: any, next: any) => {
-  const store = useStore();
-  if(store.loggedIn) {
-    next()
-    return
-  }
-  next('/')
-}
+const token = <string>localStorage.getItem('access_token');
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -41,7 +35,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardPage,
-    beforeEnter: loggedIn,
+    //beforeEnter: loggedIn,
     meta: {
       requiresAuth: true,
     }
@@ -50,7 +44,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/dashboard/:id/activities',
     name: 'activities',
     component: ActivitiesPage,
-    beforeEnter: loggedIn,
+    //beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -59,7 +53,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/activities/:id/items',
     name: 'items',
     component: ItemsPage,
-    beforeEnter: loggedIn,
+    //beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -68,7 +62,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/activityTypes/new',
     name: 'addActivityType',
     component: RegisterActivityTypePage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -77,16 +71,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/activities/new',
     name: 'addActivity',
     component: RegisterActivityPage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
   },
   {
-    path: '/items/new',
+    path: '/items/:id/new',
     name: 'addItem',
     component: RegisterItemPage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -95,7 +89,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/items/:id/histories',
     name: 'histories',
     component: HistoriesPage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -104,7 +98,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/items/:id/stats',
     name: 'statistics',
     component: StatsPage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -113,7 +107,7 @@ const routes: Array<RouteRecordRaw> = [
     path: '/:id/histories/new',
     name: 'addHistory',
     component: RegisterHistoryPage,
-    beforeEnter: loggedIn,
+    // beforeEnter: loggedIn,
     meta: {
       requiresAuth: true
     }
@@ -125,10 +119,25 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach( (to, from, next) => {
   const store = useStore();
-  if (to.name !== 'Login' && !loggedIn) next({ name: 'Login' })
-  else next()
+  const loggedIn = !store.loggedIn ? false : true;
+  console.log(loggedIn)
+  if (to.name !== 'login' && !loggedIn) {
+    next({ name: 'login'});
+  } else if (loggedIn && token) {
+    const jwtPayload = parseJWT(token);
+    if (jwtPayload.exp < Date.now()/1000) {
+        // token expired
+        console.log('token expired');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('user')
+        next({ name: 'login' });
+    }
+    next();
+  } else {
+    next();
+  }
 });
 
 export default router

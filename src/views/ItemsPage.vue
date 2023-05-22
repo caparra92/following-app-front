@@ -17,7 +17,7 @@
             </ion-row>
             <ion-row>
                 <ion-col class="add-button-col">
-                    <add-button @click.prevent="addItem"></add-button>
+                    <add-button @click="addItem(activityId)"></add-button>
                 </ion-col>
             </ion-row>
         </ion-grid>
@@ -38,7 +38,7 @@ import MenuBadge from "@/components/MenuBadge.vue";
 import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import { useItems } from "@/stores/items";
 import { useHistories } from '../stores/histories';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, defineEmits } from 'vue';
 import { deleteAlert, successAlert } from "../helpers/alerts";
 
 const categories = ref(<any>[]);
@@ -49,19 +49,19 @@ itemHeight: 96
 const handlerMessage = ref('');
 const items = useItems();
 const histories = useHistories();
+const route = useRoute();
+const activityId = <string>route.params.id;
 let data: any;
 
 onMounted(async()=> {
-    const route = useRoute();
-    const id = <string>route.params.id;
-    await items.getItemsByActivityId(id);
+    await items.getItemsByActivityId(activityId);
     categories.value = items.getItems;
     loaded.value = true;
-    histories.activityId = id;
+    histories.activityId = activityId;
 });
 
-const addItem = () => {
-    router.push('/items/new');
+const addItem = (id: string) => {
+    router.push(`/items/${id}/new`);
 }
 
 const removeItem = async (id: string) => {

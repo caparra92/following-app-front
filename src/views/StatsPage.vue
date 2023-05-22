@@ -13,6 +13,7 @@
                         </swiper-slide>
                     </swiper>
                 </ion-row>
+                <p class="message" v-if="message != ''">{{message}}</p>
                 <bar-chart :chart-data="chartData" :options="options"></bar-chart>
            </ion-grid>
            <loader-spinner v-else></loader-spinner>
@@ -27,7 +28,7 @@ import MenuBadge from "@/components/MenuBadge.vue";
 import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import getHistories from '@/composables/getHistories';
 
-const { modules, itemObj, uniqueMonthId, selectItem, activeIndex, loaded, chartData, options } = getHistories();
+const { modules, message, itemObj, uniqueMonthId, selectItem, activeIndex, loaded, chartData, options } = getHistories();
 // console.log(loaded.value)
 
 </script>
@@ -63,5 +64,10 @@ button {
 .active {
     background-color: #FCDB00;
     color: var(--ion-color-primary-contrast);
+}
+
+.message {
+    font-size: .6em;
+    text-align: center;
 }
 </style>

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { apiReq } from '../../config/config';
 
-let token = localStorage.getItem('access_token') || null;
+const token = localStorage.getItem('access_token') || null;
 
 export const useHistories = defineStore('histories', {
     state: () => {
@@ -20,16 +20,13 @@ export const useHistories = defineStore('histories', {
       getItemId: (state) => state.itemId
     },
     actions: {
-      setToken(payload: string | null) {
-        token = payload
-      },
         async getHistoriesByItemId(id : string, offset?: number) {
             try {
               if(offset) {
                 const { data } = await this.apiReq.get(`/items/${id}/${offset}/histories`);
                 if(data.histories.length){
                   this.histories = this.historiesById;
-                  this.setToken(localStorage.getItem('access_token'));
+                  //this.setToken(localStorage.getItem('access_token'));
                 } else {
                   this.histories = data.histories;
                 }
