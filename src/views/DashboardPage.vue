@@ -35,12 +35,19 @@ import MenuBadge from '../components/MenuBadge.vue';
 import LoaderSpinner from '@/components/LoaderSpinner.vue';
 import router from '@/router';
 import getActivityTypes from '@/composables/getActivityTypes';
+import { watch, watchEffect } from 'vue';
 
 const addCategory = () => {
     router.push('/activityTypes/new');
 }
 
-const { list, loaded, containerProps, wrapperProps, removeItem } = getActivityTypes();
+let { list, loaded, containerProps, wrapperProps, removeItem } = getActivityTypes();
+
+watchEffect(() => {
+   ({ list, loaded, containerProps, wrapperProps, removeItem } = getActivityTypes());
+    console.log('watching....');
+});
+
 
 </script>
 

@@ -44,8 +44,6 @@ export const useActivities = defineStore('activities', {
           async getActivitiesByTypeId(id: string) {
             try {
               const { data } = await this.apiReq.get(`/activityTypes/${id}/activities`);
-              console.log(data)
-              console.log(user)
               this.activities = data.activities;
               return data;
             } catch (error) {

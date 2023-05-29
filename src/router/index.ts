@@ -119,20 +119,24 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach( (to, from, next) => {
+router.beforeEach( async (to, from, next) => {
   const store = useStore();
   const loggedIn = !store.loggedIn ? false : true;
+  const email = store.email;
   console.log(loggedIn)
   if (to.name !== 'login' && !loggedIn) {
     next({ name: 'login'});
   } else if (loggedIn && token) {
+    console.log('logged in and token detected')
     const jwtPayload = parseJWT(token);
     if (jwtPayload.exp < Date.now()/1000) {
         // token expired
         console.log('token expired');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('user')
-        next({ name: 'login' });
+        // if(email != null || email != undefined) {
+        //   await store.refresh(email);
+        // }
+        //localStorage.removeItem('access_token');
+        //localStorage.removeItem('user')  
     }
     next();
   } else {

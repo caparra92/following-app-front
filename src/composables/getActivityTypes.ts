@@ -11,7 +11,7 @@ const getActivityTypes = () => {
     const handlerMessage = ref('');
     const loaded = ref(false);
     let data: any;
-
+    
     const { list, containerProps, wrapperProps } = useVirtualList(categories, {
         itemHeight: 96
     });
@@ -36,6 +36,7 @@ const getActivityTypes = () => {
     }
 
     initActivityTypes();
+    
 
     return {
         categories,
@@ -51,4 +52,4 @@ const getActivityTypes = () => {
 
 };
 
-export default getActivityTypes
+export default getActivityTypes;
