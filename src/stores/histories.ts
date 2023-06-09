@@ -70,6 +70,27 @@ export const useHistories = defineStore('histories', {
             return error;
           }
         },
+        async updateHistory(id : string, date: string, value: number) {
+          try {
+            const { data } = await this.apiReq.put(`/histories/${id}`, {
+              date,
+              value
+            });
+            const index = this.histories.length > 0 ? this.histories.findIndex(item => item.id == id) : this.historiesById.findIndex(item => item.id == id); 
+            if(this.histories.length > 0 ) {
+              this.histories[index].date = date;
+              this.histories[index].value = value;
+            } else {
+              this.historiesById[index].date = date;
+              this.historiesById[index].value = value;
+            }
+            console.log(this.histories)
+            console.log(this.historiesById)
+            return data;
+          } catch (error) {
+            return error;
+          }
+        },
         async removeHistory(id : string) {
           try {
             const { data } = await this.apiReq.delete(`/histories/${id}`);

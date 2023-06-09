@@ -34,12 +34,12 @@
                     <ion-grid v-if="loaded">
                         <form>
                             <ion-list v-if="mode==='update'">
-                                <base-input type="text" label="date" v-model="singleHistory.date"></base-input>
+                                <base-input type="date" label="date" v-model="singleHistory.date"></base-input>
                                 <base-input type="number" label="value" v-model="singleHistory.value"></base-input>
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-button class="single-button-update">Update</ion-button>
+                                            <ion-button class="single-button-update" @click.prevent="updateItem">Update</ion-button>
                                         </ion-item>
                                     </ion-col>
                                 </ion-row>
@@ -80,8 +80,9 @@
    const handlerMessage = ref('');
    const histories = useHistories();
    const singleHistory = ref({
+    id: '',
     date: '',
-    value: ''
+    value: 0
    });
    const isOpen = ref(false);
    const mode = ref('');
@@ -117,6 +118,7 @@
         isOpen.value = true;
         try {
             const { history } = await histories.getHistory(id);
+            singleHistory.value.id = history.id;
             singleHistory.value.date = history.date;
             singleHistory.value.value = history.value;
         } catch (error) {
@@ -127,6 +129,16 @@
     const closeModal = () => {
         isOpen.value = false;
     }
+
+   const updateItem = async(id: string) => {
+    try {
+        data = await histories.updateHistory(singleHistory.value.id, singleHistory.value.date, singleHistory.value.value);
+        await successAlert(data.message);
+        closeModal();
+    } catch (error) {
+        throw `Error during updating with ${error}`;
+    }
+   }
    
    const removeItem = async (id: string) => {
        try {
